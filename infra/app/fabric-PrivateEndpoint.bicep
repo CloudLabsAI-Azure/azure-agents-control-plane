@@ -16,9 +16,6 @@ param virtualNetworkName string
 @description('Specifies the name of the subnet which contains the private endpoints.')
 param subnetName string
 
-@description('Specifies the resource ID of the Fabric capacity.')
-param fabricCapacityId string
-
 @description('Optional: Resource ID of the Fabric tenant Private Link Service (Microsoft.Fabric/privateLinkServicesForFabric). If empty, the OneLake private endpoint is not created.')
 param fabricPrivateLinkServiceId string = ''
 
