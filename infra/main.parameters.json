@@ -29,6 +29,9 @@
     "fabricAdminEmail": {
       "value": "${FABRIC_ADMIN_EMAIL}"
     },
+    "fabricPrivateLinkServiceId": {
+      "value": "${FABRIC_PRIVATE_LINK_SERVICE_ID=}"
+    },
     "agentIdentityEnabled": {
       "value": "${AGENT_IDENTITY_ENABLED=false}"
     },
