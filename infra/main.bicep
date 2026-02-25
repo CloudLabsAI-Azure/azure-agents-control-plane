@@ -65,6 +65,9 @@ param fabricSkuName string = 'F2'
 param fabricAdminEmail string = ''
 param fabricEnabled bool = false  // Set to true to enable Fabric capacity deployment
 
+@description('Optional: Resource ID of the Fabric tenant Private Link Service (Microsoft.Fabric/privateLinkServicesForFabric). If empty, the OneLake private endpoint is not created.')
+param fabricPrivateLinkServiceId string = ''
+
 // =========================================
 // Fabric Data Agents Configuration
 // =========================================
@@ -840,6 +843,7 @@ module fabricPrivateEndpoint 'app/fabric-PrivateEndpoint.bicep' = if (fabricEnab
     virtualNetworkName: serviceVirtualNetworkName
     subnetName: vnetEnabled ? serviceVirtualNetworkPrivateEndpointSubnetName : ''
     fabricCapacityId: fabricCapacity!.outputs.id
+    fabricPrivateLinkServiceId: fabricPrivateLinkServiceId
     fabricCapacityName: fabricResourceName
   }
   dependsOn: [

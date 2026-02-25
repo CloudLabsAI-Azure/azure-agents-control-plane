@@ -16,8 +16,8 @@ param virtualNetworkName string
 @description('Specifies the name of the subnet which contains the private endpoints.')
 param subnetName string
 
-@description('Specifies the resource ID of the Fabric capacity.')
-param fabricCapacityId string
+@description('Optional: Resource ID of the Fabric tenant Private Link Service (Microsoft.Fabric/privateLinkServicesForFabric). If empty, the OneLake private endpoint is not created.')
+param fabricPrivateLinkServiceId string = ''
 
 @description('Specifies the name of the Fabric capacity (for naming conventions).')
 param fabricCapacityName string
@@ -167,7 +167,7 @@ resource onelakeDfsPrivateDnsZoneVirtualNetworkLink 'Microsoft.Network/privateDn
 // This enables private access to OneLake global endpoints:
 // - onelake.dfs.fabric.microsoft.com
 // - onelake.blob.fabric.microsoft.com
-resource onelakePrivateEndpoint 'Microsoft.Network/privateEndpoints@2021-08-01' = {
+resource onelakePrivateEndpoint 'Microsoft.Network/privateEndpoints@2021-08-01' = if (!empty(fabricPrivateLinkServiceId)) {
   name: 'pe-${fabricCapacityName}-onelake'
   location: location
   tags: tags
@@ -180,7 +180,7 @@ resource onelakePrivateEndpoint 'Microsoft.Network/privateEndpoints@2021-08-01' 
           // through the Fabric Admin portal. The actual privateLinkServiceId
           // comes from the Fabric tenant's Azure Private Link resource.
           // This template creates the networking infrastructure.
-          privateLinkServiceId: fabricCapacityId
+          privateLinkServiceId: fabricPrivateLinkServiceId
           groupIds: [
             'onelake'
           ]
@@ -194,7 +194,7 @@ resource onelakePrivateEndpoint 'Microsoft.Network/privateEndpoints@2021-08-01' 
 }
 
 // Private DNS Zone Group for OneLake endpoint
-resource onelakePrivateEndpointDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-08-01' = {
+resource onelakePrivateEndpointDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-08-01' = if (!empty(fabricPrivateLinkServiceId)) {
   parent: onelakePrivateEndpoint
   name: 'onelakePrivateDnsZoneGroup'
   properties: {
@@ -233,7 +233,7 @@ resource onelakePrivateEndpointDnsZoneGroup 'Microsoft.Network/privateEndpoints/
 // =========================================
 
 // A record for OneLake DFS global endpoint
-resource onelakeDfsARecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
+resource onelakeDfsARecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = if (!empty(fabricPrivateLinkServiceId)) {
   parent: fabricDfsPrivateDnsZone
   name: 'onelake'
   properties: {
@@ -247,7 +247,7 @@ resource onelakeDfsARecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
 }
 
 // A record for OneLake Blob global endpoint
-resource onelakeBlobARecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
+resource onelakeBlobARecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = if (!empty(fabricPrivateLinkServiceId)) {
   parent: fabricBlobPrivateDnsZone
   name: 'onelake'
   properties: {
@@ -261,7 +261,7 @@ resource onelakeBlobARecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
 }
 
 // Outputs
-output privateEndpointId string = onelakePrivateEndpoint.id
+output privateEndpointId string = !empty(fabricPrivateLinkServiceId) ? resourceId('Microsoft.Network/privateEndpoints', 'pe-${fabricCapacityName}-onelake') : ''
 output fabricDfsPrivateDnsZoneId string = fabricDfsPrivateDnsZone.id
 output fabricBlobPrivateDnsZoneId string = fabricBlobPrivateDnsZone.id
 output fabricApiPrivateDnsZoneId string = fabricApiPrivateDnsZone.id

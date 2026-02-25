@@ -169,6 +169,13 @@
       "type": "string",
       "defaultValue": ""
     },
+    "fabricPrivateLinkServiceId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Optional: Resource ID of the Fabric tenant Private Link Service (Microsoft.Fabric/privateLinkServicesForFabric). If empty, the OneLake private endpoint is not created."
+      }
+    },
     "fabricEnabled": {
       "type": "bool",
       "defaultValue": false
@@ -7033,6 +7040,9 @@
           "fabricCapacityId": {
             "value": "[reference('fabricCapacity').outputs.id.value]"
           },
+          "fabricPrivateLinkServiceId": {
+            "value": "[parameters('fabricPrivateLinkServiceId')]"
+          },
           "fabricCapacityName": {
             "value": "[variables('fabricResourceName')]"
           }
@@ -7069,6 +7079,13 @@
               "type": "string",
               "metadata": {
                 "description": "Specifies the resource ID of the Fabric capacity."
+              }
+            },
+            "fabricPrivateLinkServiceId": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                "description": "Optional: Resource ID of the Fabric tenant Private Link Service (Microsoft.Fabric/privateLinkServicesForFabric). If empty, the OneLake private endpoint is not created."
               }
             },
             "fabricCapacityName": {
@@ -7222,6 +7239,7 @@
               ]
             },
             "onelakePrivateEndpoint": {
+              "condition": "[not(empty(parameters('fabricPrivateLinkServiceId')))]",
               "type": "Microsoft.Network/privateEndpoints",
               "apiVersion": "2021-08-01",
               "name": "[format('pe-{0}-onelake', parameters('fabricCapacityName'))]",
@@ -7232,7 +7250,7 @@
                   {
                     "name": "onelakePrivateLinkConnection",
                     "properties": {
-                      "privateLinkServiceId": "[parameters('fabricCapacityId')]",
+                      "privateLinkServiceId": "[parameters('fabricPrivateLinkServiceId')]",
                       "groupIds": [
                         "onelake"
                       ]
@@ -7248,6 +7266,7 @@
               ]
             },
             "onelakePrivateEndpointDnsZoneGroup": {
+              "condition": "[not(empty(parameters('fabricPrivateLinkServiceId')))]",
               "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
               "apiVersion": "2021-08-01",
               "name": "[format('{0}/{1}', format('pe-{0}-onelake', parameters('fabricCapacityName')), 'onelakePrivateDnsZoneGroup')]",
@@ -7288,6 +7307,7 @@
               ]
             },
             "onelakeDfsARecord": {
+              "condition": "[not(empty(parameters('fabricPrivateLinkServiceId')))]",
               "type": "Microsoft.Network/privateDnsZones/A",
               "apiVersion": "2020-06-01",
               "name": "[format('{0}/{1}', variables('fabricDfsPrivateDNSZoneName'), 'onelake')]",
@@ -7305,6 +7325,7 @@
               ]
             },
             "onelakeBlobARecord": {
+              "condition": "[not(empty(parameters('fabricPrivateLinkServiceId')))]",
               "type": "Microsoft.Network/privateDnsZones/A",
               "apiVersion": "2020-06-01",
               "name": "[format('{0}/{1}', variables('fabricBlobPrivateDNSZoneName'), 'onelake')]",
@@ -7325,7 +7346,7 @@
           "outputs": {
             "privateEndpointId": {
               "type": "string",
-              "value": "[resourceId('Microsoft.Network/privateEndpoints', format('pe-{0}-onelake', parameters('fabricCapacityName')))]"
+              "value": "[if(not(empty(parameters('fabricPrivateLinkServiceId'))), resourceId('Microsoft.Network/privateEndpoints', format('pe-{0}-onelake', parameters('fabricCapacityName'))), '')]"
             },
             "fabricDfsPrivateDnsZoneId": {
               "type": "string",
