@@ -109,7 +109,7 @@ resource modelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2025-
   parent: foundryAccount
   name: modelDeploymentName
   sku: {
-    name: 'GlobalStandard'
+    name: 'Standard'
     capacity: modelCapacity
   }
   properties: {
