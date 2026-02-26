@@ -48,7 +48,7 @@
       "value": ""
     },
     "defenderEnabled": {
-      "value": "true"
+      "value": "false"
     },
     "defenderSecurityContactEmail": {
       "value": "GET-AZUSER-UPN"
