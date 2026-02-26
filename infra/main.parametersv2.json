@@ -1,0 +1,63 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "apim-mcp-aks"
+    },
+    "location": {
+      "value": "estus2"
+    },
+    "vnetEnabled": {
+      "value": "true"
+    },
+    "mcpEntraApplicationDisplayName": {
+      "value": "MCP-OAuth-App"
+    },
+    "mcpEntraApplicationUniqueName": {
+      "value": "mcp-oauth-app-apim"
+    },
+    "existingEntraAppId": {
+      "value": "6441e54f-8149-487b-aac4-3a55a049a362"
+    },
+    "fabricEnabled": {
+      "value": "true"
+    },
+    "fabricSkuName": {
+      "value": "F2"
+    },
+    "fabricAdminEmail": {
+      "value": "GET-AZUSER-UPN"
+    },
+    "fabricPrivateLinkServiceId": {
+      "value": ""
+    },
+    "agentIdentityEnabled": {
+      "value": "false"
+    },
+    "developerPrincipalId": {
+      "value": ""
+    },
+    "developerIpAddress": {
+      "value": ""
+    },
+    "fabricDataAgentsEnabled": {
+      "value": "true"
+    },
+    "fabricWorkspaceId": {
+      "value": ""
+    },
+    "defenderEnabled": {
+      "value": "true"
+    },
+    "defenderSecurityContactEmail": {
+      "value": "GET-AZUSER-UPN"
+    },
+    "defenderSecurityContactPhone": {
+      "value": ""
+    },
+    "purviewEnabled": {
+      "value": "false"
+    }
+  }
+}
