@@ -103,7 +103,9 @@ Use **GitHub Copilot in Agent Mode** to complete each validation step below. Ope
 
 Prompt Copilot:
 
-> *"Check that I have the prerequisites installed: Python 3.11+, Docker, Azure CLI (az and azd), and kubectl. Also verify I'm logged in to Azure."*
+```
+Check that I have the prerequisites installed: Python 3.11+, Docker, Azure CLI (az and azd), and kubectl. Also verify I'm logged in to Azure.
+```
 
 Copilot will run the version checks and report any missing tools.
 
