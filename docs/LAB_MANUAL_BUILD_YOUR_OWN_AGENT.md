@@ -79,7 +79,7 @@ By the end of this lab, you will be able to:
 - Monitor agent behavior using Azure Monitor and Application Insights
 - Browse or Query telemetry with Kusto Query Language (KQL)
 
-### Fine-Tuning & Evaluation
+### Evaluation & Fine-Tuning
 - Establish baseline evaluation scores before fine-tuning
 - Capture agent episodes for training data collection
 - Label episodes with rewards

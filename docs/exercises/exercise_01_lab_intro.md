@@ -4,7 +4,7 @@
 
 ## Overview
 
-This exercise reviews the solution architecture, introduces the lab, and validates that your environment is properly configured.
+This exercise reviews the solution architecture, introduces the lab, and validates that your environment is properly configured. You will walk through the Azure Agents Control Plane architecture to understand how each Azure service contributes to security, governance, and observability. You will then learn about the SpecKit specification-driven methodology that guides agent development throughout the lab. Finally, you will use GitHub Copilot in Agent Mode to verify prerequisites, confirm AKS connectivity, set environment variables, build and push a Docker image to ACR, and run the environment validation test to ensure everything is working end-to-end.
 
 ---
 
@@ -13,32 +13,32 @@ This exercise reviews the solution architecture, introduces the lab, and validat
 By completing this lab, you will learn how to:
 
 ### Build Your Agent
-- ✅ Review the SpecKit constitution and understand the SDLC principles in play
-- ✅ Write a detailed specification for your agent by following the SpecKit methodology
-- ✅ Integrate with the Azure Agents Control Plane infrastructure as follows:
-  - ✅ Implement an MCP-compliant agent using FastAPI
-  - ✅ Containerize your agent with Docker
-  - ✅ Deploy your agent to AKS as a new pod
+- Review the SpecKit constitution and understand the SDLC principles in play
+- Write a detailed specification for your agent by following the SpecKit methodology
+- Integrate with the Azure Agents Control Plane infrastructure as follows:
+  - Implement an MCP-compliant agent using FastAPI
+  - Containerize your agent with Docker
+  - Deploy your agent to AKS as a new pod
 
 ### Enterprise Governance
-- ✅ Understand how Azure API Management acts as the governance gateway
-- ✅ Inspect APIM policies that enforce rate limits, quotas, and compliance with enterprise standards
-- ✅ Trace requests through the control plane using distributed tracing
+- Understand how Azure API Management acts as the governance gateway
+- Inspect APIM policies that enforce rate limits, quotas, and compliance with enterprise standards
+- Trace requests through the control plane using distributed tracing
 
 ### Security & Identity
-- ✅ Configure identity for agents running in AKS pods
-- ✅ Implement least-privilege RBAC for agent resources and tooling access
-- ✅ Validate keyless authentication patterns
+- Learn how identities are used for agents running in AKS pods
+- Implement least-privilege RBAC for agent resources and tooling access
+- Validate keyless authentication patterns
 
 ### Observability
-- ✅ Monitor agent behavior using Azure Monitor and Application Insights
-- ✅ Query telemetry with Kusto Query Language (KQL)
+- Monitor agent behavior using Azure Monitor and Application Insights
+- Query telemetry with Kusto Query Language (KQL)
 
-### Fine-Tuning & Evaluation
-- ✅ Capture agent episodes for training data collection
-- ✅ Label episodes with rewards (human or automated)
-- ✅ Fine-tune models using Agent Lightning
-- ✅ Run structured evaluations measuring intent resolution, tool accuracy, and task adherence
+### Evaluation & Fine-Tuning
+- Capture agent episodes for training data collection
+- Label episodes with rewards (human or automated)
+- Fine-tune models using Agent Lightning
+- Run structured evaluations measuring intent resolution, tool accuracy, and task adherence
 
 ---
 
@@ -113,7 +113,10 @@ Copilot will run the version checks and report any missing tools.
 
 Prompt Copilot:
 
-> *"Verify I can connect to the AKS cluster and that the mcp-agents namespace exists."*
+```
+Verify I can connect to the AKS cluster and that the mcp-agents namespace exists.
+```
+
 
 Copilot will run `kubectl get nodes` and `kubectl get namespace mcp-agents`. If the connection fails, ask Copilot: *"Help me get AKS credentials for my cluster."*
 
@@ -121,7 +124,9 @@ Copilot will run `kubectl get nodes` and `kubectl get namespace mcp-agents`. If 
 
 Prompt Copilot:
 
-> *"Check that the required environment variables are set: CONTAINER_REGISTRY, AZURE_TENANT_ID, FOUNDRY_PROJECT_ENDPOINT, and COSMOSDB_ENDPOINT."*
+```
+Check that the required environment variables are set: CONTAINER_REGISTRY, AZURE_TENANT_ID, FOUNDRY_PROJECT_ENDPOINT, and COSMOSDB_ENDPOINT.
+```
 
 Copilot will inspect your terminal session and identify any missing variables. If values are missing, ask Copilot: *"Help me set the missing environment variables from my Azure deployment."*
 
@@ -129,15 +134,25 @@ Copilot will inspect your terminal session and identify any missing variables. I
 
 Prompt Copilot:
 
-> *"Open a port-forward tunnel to the mcp-agents service in AKS on port 8000."*
+```
+Open a port-forward tunnel to the mcp-agents service in AKS on port 8000.
+```
 
 Copilot will run `kubectl port-forward -n mcp-agents svc/mcp-agents 8000:80` in a background terminal. While the tunnel is active, agent endpoints are available at `http://localhost:8000`. Use a separate terminal for running tests.
+
+### Build Docker Image and Push to ACR
+
+Prompt Copilot:
+
+```Build the Docker image from src/Dockerfile and push it to the Azure Container Registry specified by the CONTAINER_REGISTRY environment variable.```
+
+Copilot will log in to ACR, build the Docker image, tag it with the registry name, and push it. If the `CONTAINER_REGISTRY` variable is not set, Copilot will help you retrieve it from your Azure deployment.
 
 ### Execute Environment Validation Test
 
 Prompt Copilot:
 
-> *"Activate the .venv virtual environment and run tests/test_next_best_action_functionals.py in direct mode."*
+```Activate the .venv virtual environment and run tests/test_next_best_action_functional.py in direct mode. If AKS isnt started, start it.```
 
 Copilot will activate the virtual environment, navigate to the tests directory, and execute the connection test.
 
@@ -196,7 +211,8 @@ Before proceeding to Exercise 2, please confirm the following:
 - [ ] All required tools installed (Python, Docker, Azure CLI, kubectl)
 - [ ] Connected to AKS cluster
 - [ ] Environment variables configured
+- [ ] next_best_action tests PASSED!
 
 ---
 
-**Next:** [Exercise 2: Build Agents using GitHub Copilot and SpecKit](exercise_02_build_agents.md)
+To continue the lab, click on the **Next** button.
