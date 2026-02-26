@@ -4156,7 +4156,7 @@
               "apiVersion": "2025-06-01",
               "name": "[format('{0}/{1}', parameters('foundryName'), parameters('modelDeploymentName'))]",
               "sku": {
-                "name": "GlobalStandard",
+                "name": "Standard",
                 "capacity": "[parameters('modelCapacity')]"
               },
               "properties": {
