@@ -75,14 +75,12 @@ The project is organized around two key artifacts:
 - **Constitution** — The governance framework that applies to all agents in the project. It defines shared principles such as security posture, naming conventions, MCP compliance requirements, and approval policies. Every agent specification must conform to the constitution.
 - **Specifications** — Individual agent definitions that describe the agent's domain, tools, input/output schemas, risk levels, and test criteria. In Exercise 2, you will write your own specification before generating any implementation code.
 
-```
 .speckit/
 ├── constitution.md           # Core principles and governance framework
 └── specifications/           # Individual agent specifications
     ├── customer_churn_agent.spec.md
     ├── devops_cicd_pipeline_agent.spec.md
     └── your_agent.spec.md    # Your agent specification (Exercise 2)
-```
 
 The SpecKit workflow follows this sequence:
 

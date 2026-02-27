@@ -223,7 +223,7 @@ Before proceeding to Exercise 4, please confirm the following:
 - [ ] Reviewed ontology files in storage account / Fabric IQ
 - [ ] Queried Log Analytics for agent logs
 - [ ] Verified Entra ID + RBAC role assignments
-- [ ] Documented any problems found
+- [ ] Take note of problems found
 
 ---
 

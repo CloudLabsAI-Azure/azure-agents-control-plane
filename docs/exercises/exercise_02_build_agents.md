@@ -18,7 +18,7 @@ In VS Code Explorer, navigate to and open `.speckit/constitution.md`.
 
 ### Step A.2: Identify Key Elements
 
-As you review, document at a high-level the key take-home points:
+As you review, take note at a high-level the key take-home points:
 
 | Element | Your Findings |
 |---------|---------------|
