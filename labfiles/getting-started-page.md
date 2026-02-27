@@ -73,7 +73,7 @@ To adjust the zoom level for the environment page, click the **A↕: 100%** icon
    - Enter your GitHub **Username (1)** as:
 
       ```
-      odl-user-_clabs
+      odl-user-<inject key="DeploymentID"></inject>_clabs
       ```
    - Click on Sign in with your identity **provider (2)** to continue.
 
