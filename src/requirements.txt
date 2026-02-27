@@ -12,6 +12,8 @@ pydantic>=2.9.0
 agent-framework-azure-ai==1.0.0b260107
 agent-framework-core==1.0.0b260107
 agent-framework-azure-ai-search==1.0.0b260107
+# Pin AI semantic conventions - 0.4.13 keeps LLM_REQUEST_MODEL compatible with agent-framework
+opentelemetry-semantic-conventions-ai==0.4.13
 
 # Azure AI Search for long-term memory and Foundry IQ integration
 azure-search-documents>=11.5.0
