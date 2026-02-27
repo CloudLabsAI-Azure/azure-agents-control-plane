@@ -153,7 +153,6 @@ Set up a kubectl port-forward from the mcp-agents service in the mcp-agents name
 
 ### Episode Structure
 
-```json
 {
   "id": "episode-abc123",
   "agent_id": "autonomous-agent",
@@ -173,7 +172,6 @@ Set up a kubectl port-forward from the mcp-agents service in the mcp-agents name
   "reward": null,
   "labeled": false
 }
-```
 
 ---
 
@@ -226,14 +224,12 @@ This creates a JSONL file in the format expected by Azure OpenAI:
 
 Copilot will display the dataset info. Expected output:
 
-```
 Dataset: autonomous-agent-v1
 Episodes: 150
 Avg Reward: 0.82
 Min Reward: 0.70
 Max Reward: 0.98
 Token Count: 45,230
-```
 
 ---
 
@@ -364,7 +360,6 @@ Run an automated comparison of episode quality before and after fine-tuning usin
 
 ### Example Comparison Output
 
-```
 Evaluation Comparison: baseline → v1.0-finetuned
 
 | Metric            | Baseline | Current | Change |
@@ -374,7 +369,6 @@ Evaluation Comparison: baseline → v1.0-finetuned
 | Task Adherence    | 60% pass | 90% pass| +30%   |
 
 ✅ All metrics improved after fine-tuning
-```
 
 ---
 
@@ -430,6 +424,32 @@ Store the evaluation results for historical tracking. Run: python -m evals.store
 
 ---
 
+## Evaluation Results
+
+You have completed the fine-tuning and evaluation exercise:
+
+| Evaluation | Baseline | After Fine-Tuning | Target | Status |
+|------------|----------|-------------------|--------|--------|
+| Intent Resolution | ___ / 5 | ___ / 5 | ≥ 3 | |
+| Tool Call Accuracy | ___ / 5 | ___ / 5 | ≥ 3 | |
+| Task Adherence | | | not flagged | |
+| **Overall Improved?** | | | yes | |
+
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| No episodes captured | Verify ENABLE_EPISODE_CAPTURE=true, check Cosmos DB connection |
+| Training job failed | Check dataset format, ensure sufficient high-quality episodes (100+) |
+| Model not improving | Increase epochs, reduce learning rate, add more diverse episodes |
+| Eval scores regressed | Rollback immediately, review training data for quality issues |
+| Task adherence flags correct responses | Review the evaluator prompt — may need calibration for your domain |
+| Deployment issues | Verify model name, check agent environment variables |
+| Flat scores after training | More data diversity needed; check if reward threshold is too low |
+
+---
+
 ## Completion Checklist
 
 - [ ] Evaluation dataset created with test cases
@@ -447,17 +467,6 @@ Store the evaluation results for historical tracking. Run: python -m evals.store
 
 ---
 
-## Summary
-
-You have completed the fine-tuning and evaluation exercise:
-
-| Evaluation | Baseline | After Fine-Tuning | Target | Status |
-|------------|----------|-------------------|--------|--------|
-| Intent Resolution | ___ / 5 | ___ / 5 | ≥ 3 | |
-| Tool Call Accuracy | ___ / 5 | ___ / 5 | ≥ 3 | |
-| Task Adherence | | | not flagged | |
-| **Overall Improved?** | | | yes | |
-
 ### Key Takeaways
 
 1. **Evaluate before you train** — baseline scores are your control group; without them you can't prove improvement
@@ -466,20 +475,6 @@ You have completed the fine-tuning and evaluation exercise:
 4. **Decision gates prevent regressions** — never deploy a tuned model without re-evaluating
 5. **Rollback is not failure** — it's evidence-based model management
 6. **Training data quality gates matter** — reward thresholds and episode diversity directly determine fine-tuning outcomes
-
----
-
-## Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| No episodes captured | Verify ENABLE_EPISODE_CAPTURE=true, check Cosmos DB connection |
-| Training job failed | Check dataset format, ensure sufficient high-quality episodes (100+) |
-| Model not improving | Increase epochs, reduce learning rate, add more diverse episodes |
-| Eval scores regressed | Rollback immediately, review training data for quality issues |
-| Task adherence flags correct responses | Review the evaluator prompt — may need calibration for your domain |
-| Deployment issues | Verify model name, check agent environment variables |
-| Flat scores after training | More data diversity needed; check if reward threshold is too low |
 
 ---
 
