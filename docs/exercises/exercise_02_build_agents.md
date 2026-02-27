@@ -61,7 +61,6 @@ You'll need to invent or select an existing use case:
 
 Now please move onto the next step of using GitHub Copilot and Claude Opus 4.6 to help you review, write, adjust your specification and then build it. 
 
-```powershell
 
 In VS Code Explorer, navigate to and open `.speckit/specifications`.
 

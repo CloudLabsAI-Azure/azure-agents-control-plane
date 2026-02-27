@@ -4,7 +4,7 @@
 
 ## Overview
 
-In this exercise, you will establish a **baseline evaluation** of your agent, use Agent Lightning to capture episodes and fine-tune the model, deploy the fine-tuned model, and then **re-evaluate to measure improvement**. This closed-loop approach ensures that reinforcement learning produces measurable, validated gains.
+In this exercise, you will establish a baseline evaluation of your agent, use Agent Lightning to capture episodes and fine-tune the model, deploy the fine-tuned model, and then re-evaluate to measure improvement. This closed-loop approach ensures that reinforcement learning produces measurable, validated gains.
 
 ---
 
@@ -15,7 +15,7 @@ Fine-tuning without measurement is guesswork. The evaluation framework provides 
 | Evaluator | Scale | What it Measures | Why It Matters for RL |
 |-----------|-------|------------------|----------------------|
 | **Intent Resolution** | 1-5 | Does the agent correctly understand user intent? | Fine-tuning should sharpen intent classification |
-| **Tool Call Accuracy** | 1-5 | Does the agent select the right tools with correct parameters? | This is the **primary behavior** trained by RLHF |
+| **Tool Call Accuracy** | 1-5 | Does the agent select the right tools with correct parameters? | This is the primary behavior trained by RLHF |
 | **Task Adherence** | flagged true/false | Does the agent complete the assigned task correctly? | End-to-end quality gate on response quality |
 
 Without before/after evaluation, you cannot distinguish a model that improved from one that regressed or stayed flat.
