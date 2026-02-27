@@ -15,8 +15,11 @@ In this exercise, you will build a Human-in-the-Loop agent that requires adminis
 
 In VS Code Explorer, navigate to and open `.speckit/specifications/approval_agent.spec.md`.
 
-**Prompt Copilot with:**
-> "Create an MCP agent specification for an agent that requires administrator approval via Agent 365 for high-value actions like deployments or data deletions. Governance Model should be Semi-Autonomous."
+Copilot Prompt:
+
+```
+Create an MCP agent specification for an agent that requires administrator approval via Agent 365 for high-value actions like deployments or data deletions. Governance Model should be Semi-Autonomous.
+```
 
 Key differences from autonomous agent:
 - Governance Model: Semi-Autonomous
@@ -27,8 +30,11 @@ Key differences from autonomous agent:
 
 In VS Code Explorer, navigate to and open `src/approval_agent.py`.
 
-**Prompt Copilot with:**
-> "Implement an MCP agent that integrates with Agent 365 for human approval. Include a requires_approval() function that classifies actions by risk level, and a request_approval() function that sends approval requests to a Logic App endpoint."
+Copilot Prompt:
+
+```
+Implement an MCP agent that integrates with Agent 365 for human approval. Include a requires_approval() function that classifies actions by risk level, and a request_approval() function that sends approval requests to a Logic App endpoint.
+```
 
 Example approval logic:
 
@@ -75,8 +81,11 @@ In VS Code Explorer, navigate to and open:
 
 In VS Code Explorer, navigate to and open `tests/test_approval_agent.py`.
 
-**Prompt Copilot with:**
-> "Create pytest tests for the approval agent including tests for requires_approval() classification, request_approval() integration, and end-to-end approval flow with mock responses."
+Copilot Prompt:
+
+```
+Create pytest tests for the approval agent including tests for requires_approval() classification, request_approval() integration, and end-to-end approval flow with mock responses.
+```
 
 ## Step 5: Run Unit Tests
 

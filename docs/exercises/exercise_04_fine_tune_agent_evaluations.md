@@ -63,8 +63,11 @@ Before any fine-tuning, create a consistent evaluation dataset that will be used
 
 ### Generate Evaluation Data with Copilot
 
-**Prompt Copilot (Agent Mode) with:**
-> "Generate an evaluation dataset for my autonomous agent. Review the SpecKit specification file at `.speckit/specifications/` that corresponds to my agent's use case. Also review the domain-specific task instruction documents in `task_instructions/` and the ontology fact files in `facts/ontology/` to understand the agent's domain, intents, tools, and expected behaviors. Additionally, review the existing evaluation data in `evals/next_best_action_eval_data.jsonl` as a reference for the expected JSONL format and structure. Using all of this context, generate a JSONL evaluation file at `evals/autonomous_agent_eval.jsonl`. Each line should be a JSON object with: query, expected_intent (derived from the spec's workflow intents), expected_tools (derived from the spec's MCP Tool Catalog), expected_response_contains (keywords from the task instructions and ontology), and context (user roles from the spec's security requirements). Generate at least 8 diverse test cases covering the full range of intents, tools, and edge cases defined in the specification."
+Copilot Prompt:
+
+```
+Generate an evaluation dataset for my autonomous agent. Review the SpecKit specification file at .speckit/specifications/ that corresponds to my agents use case. Also review the domain-specific task instruction documents in task_instructions/ and the ontology fact files in facts/ontology/ to understand the agents domain, intents, tools, and expected behaviors. Additionally, review the existing evaluation data in evals/next_best_action_eval_data.jsonl as a reference for the expected JSONL format and structure. Using all of this context, generate a JSONL evaluation file at evals/autonomous_agent_eval.jsonl. Each line should be a JSON object with: query, expected_intent (derived from the specs workflow intents), expected_tools (derived from the spec's MCP Tool Catalog), expected_response_contains (keywords from the task instructions and ontology), and context (user roles from the specs security requirements). Generate at least 8 diverse test cases covering the full range of intents, tools, and edge cases defined in the specification.
+```
 
 ### What Copilot Will Do
 
@@ -77,8 +80,11 @@ Copilot will:
 
 ### Verify the Generated Dataset
 
-**Prompt Copilot (Agent Mode) with:**
-> "Read the generated `evals/autonomous_agent_eval.jsonl` and verify that: (1) each line is valid JSON, (2) the expected_intent values match intents from the specification, (3) the expected_tools reference tools from the spec's MCP Tool Catalog, and (4) there are at least 8 test cases covering different intents. Report a summary."
+Copilot Prompt:
+
+```
+Read the generated evals/autonomous_agent_eval.jsonl and verify that: (1) each line is valid JSON, (2) the expected_intent values match intents from the specification, (3) the expected_tools reference tools from the specs MCP Tool Catalog, and (4) there are at least 8 test cases covering different intents. Report a summary.
+```
 
 > **Important:** Use the **same evaluation dataset** for both baseline and post-training evaluation. This is the only way to produce a valid comparison.
 
@@ -88,8 +94,11 @@ Copilot will:
 
 Establish baseline scores on the **base model** before any fine-tuning. These scores are your control group.
 
-**Prompt Copilot (Agent Mode) with:**
-> "Set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Then check if a .venv virtual environment exists in the project root — if it doesn't, create one. Activate it, install the dependencies from src/requirements.txt, and run the baseline evaluation using: `python -m evals.evaluate_next_best_action --data evals/next_best_action_eval_data.jsonl --out evals/eval_results --direct --strict`. After the evaluation completes, read the generated `evals/eval_results/eval_summary_*.json` file and display the baseline scores for Intent Resolution, Tool Call Accuracy, and Task Adherence."
+Copilot Prompt:
+
+```
+Set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Then check if a .venv virtual environment exists in the project root — if it doesnt, create one. Activate it, install the dependencies from src/requirements.txt, and run the baseline evaluation using: python -m evals.evaluate_next_best_action --data evals/next_best_action_eval_data.jsonl --out evals/eval_results --direct --strict. After the evaluation completes, read the generated evals/eval_results/eval_summary_*.json file and display the baseline scores for Intent Resolution, Tool Call Accuracy, and Task Adherence.
+```
 
 ### Review Baseline Results
 
@@ -110,8 +119,11 @@ Copilot will display your baseline scores. Record them here — you will compare
 
 Now enable episode capture to collect training data.
 
-**Prompt Copilot (Agent Mode) with:**
-> "Enable episode capture for the autonomous agent and approval agent deployments on AKS. Set the ENABLE_EPISODE_CAPTURE=true environment variable on both the `autonomous-agent` and `approval-agent` deployments in the `mcp-agents` namespace using kubectl set env. Then restart both deployments with kubectl rollout restart and verify they are running with the new environment variable."
+Copilot Prompt:
+
+```
+Enable episode capture for the autonomous agent and approval agent deployments on AKS. Set the ENABLE_EPISODE_CAPTURE=true environment variable on both the autonomous-agent and approval-agent deployments in the mcp-agents namespace using kubectl set env. Then restart both deployments with kubectl rollout restart and verify they are running with the new environment variable.
+```
 
 ---
 
@@ -119,8 +131,11 @@ Now enable episode capture to collect training data.
 
 Make several requests to generate episodes for training data.
 
-**Prompt Copilot (Agent Mode) with:**
-> "Set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Then activate the `.venv` virtual environment and run `python scripts/generate_episodes.py` to send each evaluation query from `evals/autonomous_agent_eval.jsonl` to the agent. The script connects to the MCP SSE endpoint at `http://localhost:8080/runtime/webhooks/mcp/sse`, establishes a session, and sends JSON-RPC tool calls for each query with a 2-second pause between requests. Display the output showing how many episodes were generated successfully."
+Copilot Prompt:
+
+```
+Set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Then activate the .venv virtual environment and run python scripts/generate_episodes.py to send each evaluation query from evals/autonomous_agent_eval.jsonl to the agent. The script connects to the MCP SSE endpoint at http://localhost:8080/runtime/webhooks/mcp/sse, establishes a session, and sends JSON-RPC tool calls for each query with a 2-second pause between requests. Display the output showing how many episodes were generated successfully.
+```
 
 > **Tip:** You can also run `python scripts/generate_episodes.py --list-tools` to see all available tools on the agent before generating episodes.
 
@@ -130,8 +145,11 @@ Make several requests to generate episodes for training data.
 
 Query captured episodes via the MCP API.
 
-**Prompt Copilot (Agent Mode) with:**
-> "Set up a kubectl port-forward from the mcp-agents service in the mcp-agents namespace on port 8000:80. Then activate the `.venv` virtual environment and run `python scripts/list_episodes.py --port 8000 --agent-id mcp-agents --limit 10` to list the most recent 10 captured episodes. The script connects to the MCP SSE endpoint and calls the `lightning_list_episodes` tool. Display the results and summarize how many episodes were captured."
+Copilot Prompt:
+
+```
+Set up a kubectl port-forward from the mcp-agents service in the mcp-agents namespace on port 8000:80. Then activate the .venv virtual environment and run python scripts/list_episodes.py --port 8000 --agent-id mcp-agents --limit 10 to list the most recent 10 captured episodes. The script connects to the MCP SSE endpoint and calls the lightning_list_episodes tool. Display the results and summarize how many episodes were captured.
+```
 
 ### Episode Structure
 
@@ -165,8 +183,11 @@ Review episodes and assign rewards based on quality.
 
 ### Automated Labeling
 
-**Prompt Copilot (Agent Mode) with:**
-> "Set up a kubectl port-forward from the mcp-agents service in the mcp-agents namespace on port 8000:80. Then activate the `.venv` virtual environment and run `python scripts/label_episodes.py --port 8000 --agent-id mcp-agents --limit 20` to automatically label captured episodes with rewards. The script connects to the MCP SSE endpoint, lists all episodes via `lightning_list_episodes`, scores each one using quality heuristics (tool correctness, output completeness, error detection), and assigns rewards via `lightning_assign_reward`. Display the output showing the reward distribution summary."
+Copilot Prompt:
+
+```
+Set up a kubectl port-forward from the mcp-agents service in the mcp-agents namespace on port 8000:80. Then activate the .venv virtual environment and run python scripts/label_episodes.py --port 8000 --agent-id mcp-agents --limit 20 to automatically label captured episodes with rewards. The script connects to the MCP SSE endpoint, lists all episodes via lightning_list_episodes, scores each one using quality heuristics (tool correctness, output completeness, error detection), and assigns rewards via lightning_assign_reward. Display the output showing the reward distribution summary.
+```
 
 ### Manual Override
 
@@ -188,8 +209,11 @@ If you want to override specific episode labels, you can call the `lightning_ass
 
 Create a training dataset from labeled episodes.
 
-**Prompt Copilot (Agent Mode) with:**
-> "Build a fine-tuning dataset from labeled episodes for the autonomous-agent. Run: `python -m src.lightning.cli build-dataset --agent-id autonomous-agent --name autonomous-agent-v1 --min-reward 0.7 --output-format jsonl`. This will create a JSONL file in the Azure OpenAI fine-tuning format. After building, run `python -m src.lightning.cli dataset-info --name autonomous-agent-v1` to display the dataset statistics including episode count, average reward, and token count."
+Copilot Prompt:
+
+```
+Build a fine-tuning dataset from labeled episodes for the autonomous-agent. Run: python -m src.lightning.cli build-dataset --agent-id autonomous-agent --name autonomous-agent-v1 --min-reward 0.7 --output-format jsonl. This will create a JSONL file in the Azure OpenAI fine-tuning format. After building, run python -m src.lightning.cli dataset-info --name autonomous-agent-v1 to display the dataset statistics including episode count, average reward, and token count.
+```
 
 This creates a JSONL file in the format expected by Azure OpenAI:
 
@@ -217,15 +241,21 @@ Token Count: 45,230
 
 Submit a fine-tuning job to Azure OpenAI.
 
-**Prompt Copilot (Agent Mode) with:**
-> "Start a fine-tuning job on Azure OpenAI for the mcp-agents agent using the `lightning_start_training` MCP tool. Use the latest dataset built in Step 4.7, base model `gpt-4o-mini`, 3 epochs, and learning rate multiplier 1.0. Note the returned training run ID and AOAI job ID."
+Copilot Prompt:
+
+```
+Start a fine-tuning job on Azure OpenAI for the mcp-agents agent using the lightning_start_training MCP tool. Use the latest dataset built in Step 4.7, base model gpt-4o-mini, 3 epochs, and learning rate multiplier 1.0. Note the returned training run ID and AOAI job ID.
+```
 
 ### Monitor Training Progress
 
 After starting the job, monitor it using the monitoring script. This polls the Azure OpenAI API directly (via MCP) and updates the Cosmos DB record in real-time.
 
-**Prompt Copilot (Agent Mode) with:**
-> "Ensure kubectl port-forward is active on port 8000 to mcp-agents. Then activate .venv and run: `python scripts/monitor_training.py --training-run-id <training_run_id> --port 8000 --interval 30`. This will poll the AOAI API until the job completes or fails."
+Copilot Prompt:
+
+```
+Ensure kubectl port-forward is active on port 8000 to mcp-agents. Then activate .venv and run: python scripts/monitor_training.py --training-run-id <training_run_id> --port 8000 --interval 30s. This will poll the AOAI API until the job completes or fails.
+```
 
 Expected output during training:
 
@@ -267,8 +297,11 @@ Next step: Deploy the model with:
 
 Use the deployment script to promote the model in Cosmos and update the AKS deployment in one step.
 
-**Prompt Copilot (Agent Mode) with:**
-> "Ensure kubectl port-forward is active on port 8000 to mcp-agents. Then activate .venv and run: `python scripts/deploy_finetuned_model.py --training-run-id <training_run_id> --port 8000 --deployment mcp-agents`. This will: (1) verify the training succeeded, (2) promote the model via MCP, (3) set USE_TUNED_MODEL=true and TUNED_MODEL_NAME on the K8s deployment, and (4) wait for rollout."
+Copilot Prompt:
+
+```
+Ensure kubectl port-forward is active on port 8000 to mcp-agents. Then activate .venv and run: python scripts/deploy_finetuned_model.py --training-run-id <training_run_id> --port 8000 --deployment mcp-agents. This will: (1) verify the training succeeded, (2) promote the model via MCP, (3) set USE_TUNED_MODEL=true and TUNED_MODEL_NAME on the K8s deployment, and (4) wait for rollout.
+```
 
 Expected output:
 
@@ -305,8 +338,11 @@ Deployment complete!
 
 Run the **same evaluation dataset** from Step 4.2 against the fine-tuned model. This is the critical comparison.
 
-**Prompt Copilot (Agent Mode) with:**
-> "Run the post-training evaluation using the same dataset and thresholds as the baseline in Step 4.2. Set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Then activate the .venv and run: `python -m evals.evaluate_next_best_action --data evals/next_best_action_eval_data.jsonl --out evals/eval_results --direct --strict`. After the evaluation completes, read the generated eval_summary JSON and compare the scores against the baseline results from Step 4.2. Display a before/after comparison table."
+Copilot Prompt:
+
+```
+Run the post-training evaluation using the same dataset and thresholds as the baseline in Step 4.2. Set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Then activate the .venv and run: python -m evals.evaluate_next_best_action --data evals/next_best_action_eval_data.jsonl --out evals/eval_results --direct --strict. After the evaluation completes, read the generated eval_summary JSON and compare the scores against the baseline results from Step 4.2. Display a before/after comparison table.
+```
 
 ### Compare Before/After Results
 
@@ -320,8 +356,11 @@ Fill in the table below with your actual scores. Expected improvement ranges are
 
 ### Run Automated Comparison
 
-**Prompt Copilot (Agent Mode) with:**
-> "Run an automated comparison of episode quality before and after fine-tuning using: `python -m src.lightning.cli compare-versions --agent-id autonomous-agent --before-date 2026-02-07T00:00:00Z --after-date 2026-02-07T12:00:00Z`. Display the comparison table with intent resolution, tool accuracy, and task adherence metrics."
+Copilot Prompt:
+
+```
+Run an automated comparison of episode quality before and after fine-tuning using: python -m src.lightning.cli compare-versions --agent-id autonomous-agent --before-date 2026-02-07T00:00:00Z --after-date 2026-02-07T12:00:00Z. Display the comparison table with intent resolution, tool accuracy, and task adherence metrics.
+```
 
 ### Example Comparison Output
 
@@ -351,13 +390,19 @@ This is the most important step. Based on your evaluation comparison, take one o
 
 ### If Improved — Keep It
 
-**Prompt Copilot (Agent Mode) with:**
-> "Verify the tuned model is active by running: `python -m src.lightning.cli list-deployments --agent-id autonomous-agent`. Confirm the fine-tuned model is the active deployment."
+Copilot Prompt:
+
+```
+Verify the tuned model is active by running: python -m src.lightning.cli list-deployments --agent-id autonomous-agent. Confirm the fine-tuned model is the active deployment.
+```
 
 ### If Regressed — Rollback
 
-**Prompt Copilot (Agent Mode) with:**
-> "Rollback the autonomous-agent to the base model. Run: `python -m src.lightning.cli rollback --agent-id autonomous-agent --reason 'Eval scores regressed after fine-tuning'`. Then set `USE_TUNED_MODEL=false` on the autonomous-agent deployment in the mcp-agents namespace using kubectl set env, restart the deployment, and verify pods are running with the base model."
+Copilot Prompt:
+
+```
+Rollback the autonomous-agent to the base model. Run: python -m src.lightning.cli rollback --agent-id autonomous-agent --reason 'Eval scores regressed after fine-tuning'. Then set USE_TUNED_MODEL=false on the autonomous-agent deployment in the mcp-agents namespace using kubectl set env, restart the deployment, and verify pods are running with the base model.
+```
 
 ### If Flat — Diagnose and Retry
 
@@ -377,8 +422,11 @@ If scores didn't meaningfully change, the issue is usually one of:
 
 ### Store Results for Tracking
 
-**Prompt Copilot (Agent Mode) with:**
-> "Store the evaluation results for historical tracking. Run: `python -m evals.store_results --input evals/eval_results/eval_summary_*.json --agent-id autonomous-agent --version v1.0-finetuned`. Then verify the results were stored by querying Cosmos DB for evaluation records for the autonomous-agent."
+Copilot Prompt:
+
+```
+Store the evaluation results for historical tracking. Run: python -m evals.store_results --input evals/eval_results/eval_summary_*.json --agent-id autonomous-agent --version v1.0-finetuned. Then verify the results were stored by querying Cosmos DB for evaluation records for the autonomous-agent.
+```
 
 ---
 

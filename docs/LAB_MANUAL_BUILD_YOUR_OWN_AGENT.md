@@ -35,20 +35,9 @@ Traditional AI agent frameworks and architectures focus on getting something wor
 - **Centralized Governance** - Policy enforcement, rate limiting, decision making approvals and a registry for compliance tracking
 - **Identity-First Security** - Every agent has a Microsoft Entra ID Agent identity with Role-Based Access Control (RBAC)
 - **API-First Architecture** - All agent operations flow through Azure API Management (APIM) using Model Context Protocol (MCP)
-- **Security** - Threat protection, secret management, network isolation, and credential administration for all agent workloads
+- **Security** - OAuth validation through APIM, identity-scoped RBAC, network isolation, and keyless authentication for all agent workloads
 - **Multi-Cloud Capable** - Agents can execute anywhere while being governed by Azure
 - **Continuous Improvement** - Built-in evaluations, learning, and fine-tuning pipelines
-
----
-
-## Table of Contents
-
-1. Exercises
-2. Lab Objectives
-3. Exercise 1: Lab Intro
-4. Exercise 2: Build Agents
-5. Exercise 3: Review Agents Control Plane
-6. Exercise 4: Fine-Tune and Evaluate Agent
 
 ---
 

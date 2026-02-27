@@ -68,7 +68,7 @@ The control plane is composed of Azure services that each fulfill a distinct rol
 
 ### SpecKit Methodology
 
-SpecKit is a **specification-driven development methodology** that ensures all agents are properly defined before implementation. Rather than jumping straight into code, SpecKit requires you to first articulate what your agent does, what tools it exposes, its governance model, and its expected behavior — all in a structured specification document.
+SpecKit is a specification-driven development methodology that ensures all agents are properly defined before implementation. Rather than jumping straight into code, SpecKit requires you to first articulate what your agent does, what tools it exposes, its governance model, and its expected behavior — all in a structured specification document.
 
 The project is organized around two key artifacts:
 
@@ -91,7 +91,7 @@ The SpecKit workflow follows this sequence:
 3. **Use GitHub Copilot** to generate implementation code from the specification
 4. **Validate** that the implementation matches the specification through testing
 
-You will work hands-on with SpecKit in [Exercise 2: Build Agents](exercise_02_build_agents.md).
+You will work hands-on with SpecKit in Exercise 2: Build Agents.
 
 ---
 
@@ -101,7 +101,7 @@ Use **GitHub Copilot in Agent Mode** to complete each validation step below. Ope
 
 ### Prerequisites Check
 
-Prompt Copilot:
+Copilot Prompt:
 
 ```
 Check that I have the prerequisites installed: Python 3.11+, Docker, Azure CLI (az and azd), and kubectl. Also verify I'm logged in to Azure.
@@ -111,7 +111,7 @@ Copilot will run the version checks and report any missing tools.
 
 ### AKS Cluster Access
 
-Prompt Copilot:
+Copilot Prompt:
 
 ```
 Verify I can connect to the AKS cluster and that the mcp-agents namespace exists.
@@ -122,7 +122,7 @@ Copilot will run `kubectl get nodes` and `kubectl get namespace mcp-agents`. If 
 
 ### Environment Variables
 
-Prompt Copilot:
+Copilot Prompt:
 
 ```
 Check that the required environment variables are set: CONTAINER_REGISTRY, AZURE_TENANT_ID, FOUNDRY_PROJECT_ENDPOINT, and COSMOSDB_ENDPOINT.
@@ -132,7 +132,7 @@ Copilot will inspect your terminal session and identify any missing variables. I
 
 ### Port-Forward Tunnel to MCP Agents
 
-Prompt Copilot:
+Copilot Prompt:
 
 ```
 Open a port-forward tunnel to the mcp-agents service in AKS on port 8000.
@@ -142,7 +142,7 @@ Copilot will run `kubectl port-forward -n mcp-agents svc/mcp-agents 8000:80` in 
 
 ### Build Docker Image and Push to ACR
 
-Prompt Copilot:
+Copilot Prompt:
 
 ```Build the Docker image from src/Dockerfile and push it to the Azure Container Registry specified by the CONTAINER_REGISTRY environment variable.```
 
@@ -150,7 +150,7 @@ Copilot will log in to ACR, build the Docker image, tag it with the registry nam
 
 ### Execute Environment Validation Test
 
-Prompt Copilot:
+Copilot Prompt:
 
 ```Activate the .venv virtual environment and run tests/test_next_best_action_functional.py in direct mode. If AKS isnt started, start it.```
 
@@ -158,7 +158,6 @@ Copilot will activate the virtual environment, navigate to the tests directory, 
 
 **Expected Output:**
 
-```
 ======================================================================
 🧪 Testing next_best_action MCP Tool
 ======================================================================
@@ -184,7 +183,6 @@ Copilot will activate the virtual environment, navigate to the tests directory, 
 
 🎯 Test 3/3 — Design a REST API...
 ✅ Task analysis complete (plan generated, stored in Cosmos)
-```
 
 ### Troubleshooting
 
