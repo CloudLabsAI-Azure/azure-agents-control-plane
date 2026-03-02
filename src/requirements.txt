@@ -4,6 +4,7 @@ uvicorn[standard]>=0.30.6
 azure-storage-blob==12.19.0
 azure-identity>=1.19.0
 azure-ai-evaluation>=1.14.0
+azure-ai-projects==2.0.0b3
 aiohttp
 pydantic>=2.9.0
 
