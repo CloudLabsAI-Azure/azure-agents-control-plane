@@ -4166,7 +4166,6 @@
                   "version": "[parameters('modelVersion')]"
                 },
                 "versionUpgradeOption": "OnceNewDefaultVersionAvailable",
-                "currentCapacity": "[parameters('modelCapacity')]",
                 "raiPolicyName": "Microsoft.DefaultV2"
               },
               "dependsOn": [
@@ -4188,7 +4187,6 @@
                   "version": "[parameters('embeddingModelVersion')]"
                 },
                 "versionUpgradeOption": "OnceNewDefaultVersionAvailable",
-                "currentCapacity": "[parameters('embeddingModelCapacity')]",
                 "raiPolicyName": "Microsoft.DefaultV2"
               },
               "dependsOn": [
