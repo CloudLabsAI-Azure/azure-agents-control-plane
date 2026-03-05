@@ -142,7 +142,9 @@ Copilot will run `kubectl port-forward -n mcp-agents svc/mcp-agents 8000:80` in 
 
 Copilot Prompt:
 
-```Build the Docker image from src/Dockerfile and push it to the Azure Container Registry specified by the CONTAINER_REGISTRY environment variable.```
+```
+Build the Docker image from src/Dockerfile and push it to the Azure Container Registry specified by the CONTAINER_REGISTRY environment variable.
+```
 
 Copilot will log in to ACR, build the Docker image, tag it with the registry name, and push it. If the `CONTAINER_REGISTRY` variable is not set, Copilot will help you retrieve it from your Azure deployment.
 
@@ -150,7 +152,9 @@ Copilot will log in to ACR, build the Docker image, tag it with the registry nam
 
 Copilot Prompt:
 
-```Activate the .venv virtual environment and run tests/test_next_best_action_functional.py in direct mode. If AKS isnt started, start it.```
+```
+Activate the .venv virtual environment and run tests/test_next_best_action_functional.py in direct mode. If AKS isnt started, start it.
+```
 
 Copilot will activate the virtual environment, navigate to the tests directory, and execute the connection test.
 
