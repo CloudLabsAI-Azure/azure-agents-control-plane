@@ -1,6 +1,6 @@
 # Building and Managing AI Agents using Azure Agents Control Plane
 
-Welcome to Building and Managing AI Agents using Azure Agents Control Plane hands on hands-on lab, you will learn how the Azure Agents Control Plane governs the complete lifecycle of enterprise AI agents, including analysis, design, development, testing, fine-tuning, and evaluation. You will explore how Azure enables enterprise-grade AI agent development through centralized governance, observability, identity management, and compliance controls, regardless of where the agents are executed. By the end of the lab, you will understand how to leverage the Agents Control Plane to manage, monitor, and scale AI agents effectively while ensuring security, reliability, and regulatory compliance in enterprise environments.
+Welcome to Building and Managing AI Agents using Azure Agents Control Plane hands-on lab, you will learn how the Azure Agents Control Plane governs the complete lifecycle of enterprise AI agents, including analysis, design, development, testing, fine-tuning, and evaluation. You will explore how Azure enables enterprise-grade AI agent development through centralized management, identity and access controls and observability through instrumentation, monitoring and alerting, regardless of where the agents are executed. By the end of the lab, you will understand how to leverage the Azure Agents Control Plane to manage, monitor, and scale AI agents effectively while ensuring security, reliability, and regulatory compliance in enterprise environments.
 
 # Getting Started page
 
