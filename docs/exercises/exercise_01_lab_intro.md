@@ -6,6 +6,17 @@
 
 This exercise reviews the solution architecture, introduces the lab, and validates that your environment is properly configured. You will walk through the Azure Agents Control Plane architecture to understand how each Azure service contributes to security, governance, and observability. You will then learn about the SpecKit specification-driven methodology that guides agent development throughout the lab. Finally, you will use GitHub Copilot in Agent Mode to verify prerequisites, confirm AKS connectivity, set environment variables, build and push a Docker image to ACR, and run the environment validation test to ensure everything is working end-to-end.
 
+> [WARNING]
+> **Elevated Permissions in This Lab Environment**
+>
+> For the purpose of this lab, your access to the Azure subscription and resource group is at the **Owner** level. This level of access gives the AI coding agent atypical permissions. When in autonomous mode, the AI may need to temporarily disable a security control (e.g. private access) in order to successfully deploy an update to a resource that is behind the private network. The VM that the lab runs on might not have the proper networking configuration.
+>
+> **This is not a representation of a best practice.** This workaround is not recommended and it demonstrates — in and of itself — the need to scope down RBAC to identities to prevent the ability to make these kinds of changes.
+>
+> In the interest of time, however, the lab designers needed to accept this compromise to help the lab designers and learners complete the setup and the exercises themselves in a timely fashion.
+>
+
+
 ---
 
 ## Step 1.1: Review Lab Objectives
@@ -86,6 +97,8 @@ Type your prompt in the chat input — for example, *"Check that I have the prer
 And then choose which level of approval e.g. Allow All Commands in this Session
 
 ![Approvals3](media/3.png)
+
+
 
 **Step 3 — Copilot Executes and Reports Results**
 
