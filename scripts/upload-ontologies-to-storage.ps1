@@ -57,7 +57,7 @@ if ($containerExists -ne "true") {
 
 # Upload ontology files
 Write-Host "`nUploading ontology files..." -ForegroundColor Yellow
-$ontologyDir = Join-Path $PSScriptRoot ".." $OntologyPath
+$ontologyDir = Join-Path (Join-Path $PSScriptRoot "..") $OntologyPath
 if (-not (Test-Path $ontologyDir)) {
     Write-Host "Error: Ontology directory not found: $ontologyDir" -ForegroundColor Red
     exit 1
@@ -81,10 +81,10 @@ foreach ($file in $jsonFiles) {
         --auth-mode login 2>$null
     
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "    ✓ Uploaded successfully" -ForegroundColor Green
+        Write-Host "    [OK] Uploaded successfully" -ForegroundColor Green
         $uploadedCount++
     } else {
-        Write-Host "    ✗ Failed to upload" -ForegroundColor Red
+        Write-Host "    [FAIL] Failed to upload" -ForegroundColor Red
     }
 }
 
@@ -93,9 +93,12 @@ Write-Host "Uploaded $uploadedCount of $($jsonFiles.Count) ontology files" -Fore
 Write-Host "Storage URL: $storageUrl$ContainerName" -ForegroundColor Green
 
 Write-Host "`nTo use these ontologies in FactsMemory:" -ForegroundColor Yellow
-Write-Host "  facts_memory = FactsMemory(" -ForegroundColor White
-Write-Host "      storage_account_url='$storageUrl'," -ForegroundColor White
-Write-Host "      ontology_container='$ContainerName'," -ForegroundColor White
-Write-Host "      fabric_enabled=False" -ForegroundColor White
-Write-Host "  )" -ForegroundColor White
-Write-Host "  await facts_memory.load_all_ontologies()" -ForegroundColor White
+$line1 = '  facts_memory = FactsMemory('
+$line2 = "      storage_account_url='{0}'," -f $storageUrl
+$line3 = "      ontology_container='{0}'," -f $ContainerName
+Write-Host $line1 -ForegroundColor White
+Write-Host $line2 -ForegroundColor White
+Write-Host $line3 -ForegroundColor White
+Write-Host '      fabric_enabled=False' -ForegroundColor White
+Write-Host '  )' -ForegroundColor White
+Write-Host '  await facts_memory.load_all_ontologies()' -ForegroundColor White
