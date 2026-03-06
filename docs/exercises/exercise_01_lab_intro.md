@@ -185,6 +185,25 @@ Open a port-forward tunnel to the mcp-agents service in AKS on port 8000.
 
 Copilot will run `kubectl port-forward -n mcp-agents svc/mcp-agents 8000:80` in a background terminal. While the tunnel is active, agent endpoints are available at `http://localhost:8000`. Use a separate terminal for running tests.
 
+### Grant Cosmos DB Data Access
+
+The lab user (defined in the **Environment** tab of your lab portal) needs read/write access to all databases and containers in the Cosmos DB account. This assigns the built-in **Cosmos DB Built-in Data Contributor** role to your signed-in Azure user at the account scope.
+
+Copilot Prompt:
+
+```
+Grant my signed-in Azure user the Cosmos DB Built-in Data Contributor role on the Cosmos DB account in the apim-mcp-aks resource group. Use the following command:
+
+az cosmosdb sql role assignment create \
+  --account-name cosmos-$(az resource list --resource-type Microsoft.DocumentDB/databaseAccounts --query "[0].name" -o tsv) \
+  --resource-group apim-mcp-aks \
+  --role-definition-id 00000000-0000-0000-0000-000000000002 \
+  --principal-id $(az ad signed-in-user show --query id -o tsv) \
+  --scope "/"
+```
+
+Copilot will resolve your Cosmos DB account name and your Azure AD principal ID, then create the role assignment. Once complete, your portal user will have read/write access to all databases and containers in the account.
+
 ### Build Docker Image and Push to ACR
 
 Copilot Prompt:
@@ -194,6 +213,8 @@ Build the Docker image from src/Dockerfile and push it to the Azure Container Re
 ```
 
 Copilot will log in to ACR, build the Docker image, tag it with the registry name, and push it. If the `CONTAINER_REGISTRY` variable is not set, Copilot will help you retrieve it from your Azure deployment.
+
+
 
 ### Execute Environment Validation Test
 

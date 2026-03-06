@@ -16,15 +16,16 @@ Azure API Management enforces governance policies for all agent traffic. In this
 
 1. Open Azure Portal
 2. Navigate to **API Management** → Your APIM instance
-3. Go to **APIs** → **MCP API** → **Design** → **Inbound processing**
+3. Go to **APIs** → **MCP API** → **Design** → **Inbound processing** (Can be found to the right of Frontend)
+4. Click on the `</>` Icon
 
-### View the policies
+### View the policy
 
-| Question | Copilot/Your Answers |
-|----------|-------------|
-| How does the policy on all operations enforce authentication? | |
-| What happens if an unauthenticated request is made to an endpoint in this APIM? | |
-| Can you think of other policies that should be added to govern, manage and security APIs? | |
+Ask yourself (or the Azure Copilot) the following questions.
+
+- What authentication controls are in place for this policy?
+- What happens if an unauthenticated request is made to an endpoint in this APIM?
+- Can you think of other policies that should be added to govern, manage and security APIs?
 
 ---
 
