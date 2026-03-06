@@ -156,7 +156,11 @@ Copilot Prompt:
 Check that the required environment variables are set: CONTAINER_REGISTRY, AZURE_TENANT_ID, FOUNDRY_PROJECT_ENDPOINT, and COSMOSDB_ENDPOINT.
 ```
 
-Copilot will inspect your terminal session and identify any missing variables. If values are missing, ask Copilot: *"Help me set the missing environment variables from my Azure deployment."*
+Copilot will inspect your terminal session and identify any missing variables. If values are missing, ask Copilot: 
+
+```
+Help me set the missing environment variables from my Azure deployment.
+```
 
 ### Port-Forward Tunnel to MCP Agents
 
