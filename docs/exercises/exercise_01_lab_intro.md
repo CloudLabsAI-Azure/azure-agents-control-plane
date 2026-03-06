@@ -52,7 +52,7 @@ The Azure Agents Control Plane provides centralized security, governance, and ob
 
 ### Architecture Components
 
-The control plane is composed of Azure services that each fulfill a distinct role — from API governance and identity to memory, observability, and human oversight. Together, they form a layered architecture where every agent request is authenticated, authorized, planned, actioned, logged, and traceable.
+The control plane is composed of Azure services that each fulfill a distinct role — from API governance and identity to memory and observability. Together, they form a layered architecture where every agent request is authenticated, authorized, planned, actioned, logged, and traceable.
 
 | Component | Azure Service | Purpose |
 |-----------|---------------|---------|
@@ -64,7 +64,6 @@ The control plane is composed of Azure services that each fulfill a distinct rol
 | AI Models | Azure AI Foundry | LLM inference, embeddings |
 | Identity | Microsoft Entra ID | Agent identity, RBAC |
 | Observability | Azure Monitor + App Insights | Metrics, traces, logs |
-| Human Oversight | Agent 365 | Approval workflows, Teams integration |
 
 ### SpecKit Methodology
 
