@@ -59,20 +59,25 @@ You'll need to document a new specification or select an existing use case:
 - `.speckit/specifications/devops_cicd_pipeline_agent.spec.md`
 - `.speckit/specifications/user_security_agent.spec.mdd`
 
-Now please move onto the next step of using GitHub Copilot and Claude Opus 4.6 to help you review, write, adjust your specification and then build it. 
-
+Now please move onto the next step of using GitHub Copilot and Claude Opus 4.6 to help you review, write, adjust your SpecKit specification and then build it. 
 
 In VS Code Explorer, navigate to and open `.speckit/specifications`.
 
-If you want to start from scratch then follow these instructions.
+To develop your specification, have three options.
+1) start from scratch
+2) modify an existing specification
+3) simply re-use an existing specification
+
+1) If you want to start from scratch then follow these instructions.
 Be sure to edit the following with the actual use case information:
-- <responsbility_of_your_agent>
+
+- <responsibility_of_your_agent>
 - <do x,y,z>
 
 Copilot Prompt:
 
 ```
-Create an specification for an autonomous <responsbility_of_your_agent> agent that can <do x,y,z> without human intervention. Follow the SpecKit template format. Utilize the .speckit/specifications as an example.
+Create an specification for an autonomous <responsibility_of_your_agent> agent that can <do x,y,z> without human intervention. Follow the SpecKit template format. Utilize the .speckit/specifications as an example.
 
 The specification should include:
 - Overview (Spec ID, Version, Domain, Governance Model: Autonomous)
@@ -83,17 +88,21 @@ The specification should include:
 - Security Requirements
 ```
 
-If you want to alter an existing specification then follow these instructions.
+2) If you want to alter an existing specification then follow these instructions.
 Be sure to edit the following with the actual use case information:
+
 - <use_case_file_root>
 - <x,y,z>
+
 Copilot Prompt:
 
 ```
 Make a copy of the .speckit/specifications/<use_case_file_root>.spec.md. Make the following changes to it: <x,y,z>.
 ```
 
-Whether you create a new specification from scratch or made changes to an existing specification, either way, you should end up in a position with specification that can now be used to create your agent. 
+3) If you simply want to re-use an existing specification thats okay too. Except dont re-use the healthcare_digital_quality_agent.spec.md because its already built. 
+
+Whether you create a new specification from scratch, made changes to an existing specification or just used an existing specification, you should end up in a position with specification that can now be used to create your agent. 
 
 ### Step B.2: Implement Autonomous Agent, Unit Test(s) and Functional Test(s) with Copilot
 
