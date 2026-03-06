@@ -16,7 +16,7 @@ Before creating agents, you should understand the SDLC framework defined in the 
 
 In VS Code Explorer, navigate to and open `.speckit/constitution.md`.
 
-### Step A.2: Identify Key Elements
+### Step A.2: Identify Key Concepts
 
 As you review, take note at a high-level concepts that stand out in the following sections:
 
@@ -117,7 +117,7 @@ Implement an MCP-compliant FastAPI agent based on the <autonomous_agent.spec.md>
 
 ### Step B.3: Generate Domain Knowledge Facts with Copilot
 
-Your agent needs domain-specific facts to ground its reasoning. Copilot will generate ontology fact files for your agents domain and upload them.
+Your agent needs domain-specific facts to ground its reasoning. Copilot will generate ontology fact files for your agents domain and upload them. For the purposes of this lab, a storage account is being used to simulate fabric IQ from onelake.
 
 Copilot Prompt:
 ```
