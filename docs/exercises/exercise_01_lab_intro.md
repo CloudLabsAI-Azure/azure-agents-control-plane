@@ -194,31 +194,11 @@ Copilot will activate the virtual environment, navigate to the tests directory, 
 
 **Expected Output:**
 
-======================================================================
-🧪 Testing next_best_action MCP Tool
-======================================================================
-✅ Loaded configuration from tests/mcp_test_config.json
-🔗 Direct Mode URL: http://localhost:8000/runtime/webhooks/mcp
+All tests passed. Here's the summary:
 
-📡 Establishing SSE session...
-✅ Got session URL
-
-📋 Listing available tools...
-✅ Found 36 tools
-✅ Memory tools available - short-term memory is enabled
-
-======================================================================
-🤖 Testing next_best_action with sample tasks
-======================================================================
-
-🎯 Test 1/3 — Analyze customer churn data...
-✅ Task analysis complete (plan generated, stored in Cosmos)
-
-🎯 Test 2/3 — Set up a CI/CD pipeline...
-✅ Task analysis complete (plan generated, stored in Cosmos)
-
-🎯 Test 3/3 — Design a REST API...
-✅ Task analysis complete (plan generated, stored in Cosmos)
+- AKS: Already running (2 pods in mcp-agents namespace)
+- Port-forward: Already active on port 8000
+- Test results: All 3 next_best_action tests + semantic similarity test PASSED
 
 ### Troubleshooting
 
