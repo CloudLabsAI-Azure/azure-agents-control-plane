@@ -2,10 +2,10 @@
 
 ## Overview
 
-This lab guides you through building an AI agent on the `Azure Agents Control Plane` using GitHub Copilot and the SpecKit specification-driven methodology. You will validate your environment, review the project constitution, write an agent specification, implement an MCP-compliant agent with FastAPI, containerize and deploy it to AKS, then inspect the control plane — APIM governance policies, Cosmos DB short-term memory, AI Search long-term memory, and Azure Monitor observability. You will conclude by establishing baseline evaluations, capturing and labeling agent episodes, fine-tuning with Agent Lightning, and re-evaluating to validate improvement through a closed-loop reinforcement learning pipeline.
+This lab guides you through building an AI agent on the `Azure Agents Control Plane` using GitHub Copilot and the SpecKit specification-driven methodology. You will validate your environment, review the project constitution, write an agent specification, implement an MCP-compliant agent with FastAPI, containerize and deploy it to AKS, then inspect the control plane — API Management (APIM) policies, Cosmos DB short-term memory, AI Search long-term memory, and Azure Monitor observability. You will conclude by establishing baseline evaluations, capturing and labeling agent episodes, fine-tuning with Agent Lightning, and re-evaluating to validate improvement through a closed-loop reinforcement learning pipeline.
 
 **Duration**: 4 hours  
-**Prerequisites**: Completed environment setup and deployed the base Azure Agents Control Plane infrastructure
+**Prerequisites**: Environment setup and deployed the base Azure Agents Control Plane infrastructure. (Completed)
 
 ---
 
@@ -13,10 +13,10 @@ This lab guides you through building an AI agent on the `Azure Agents Control Pl
 
 | Exercise | Duration | Description |
 |----------|----------|-------------|
-| Exercise 1: Lab Intro | 30 min | Review objectives, architecture, validate environment |
-| Exercise 2: Build Agents | 2 hr | Use GitHub Copilot and SpecKit to specify, create, test, and deploy agents |
-| Exercise 3: Review Agents Control Plane | 30 min | Inspect security, governance, memory, and observability. |
-| Exercise 4: Fine-Tune and Evaluate Agent | 1 hr | Evaluate baseline, fine-tune with Agent Lightning, re-evaluate to validate improvement |
+| 1: Lab Intro | 30 min | Review objectives, architecture, validate environment |
+| 2: Build Agents | 2 hr | Use GitHub Copilot and SpecKit to specify, create, test, and deploy agents |
+| 3: Review Agents Control Plane | 30 min | Inspect security, governance, memory, and observability. |
+| 4: Fine-Tune and Evaluate Agent | 1 hr | Evaluate baseline, fine-tune with Agent Lightning, re-evaluate to validate improvement |
 
 ---
 
@@ -27,6 +27,8 @@ This lab guides you through building an AI agent on the `Azure Agents Control Pl
 The Azure Agents Control Plane is a comprehensive solution accelerator that secures, governs a control plane for agents. The following solution architecture diagram depicts the Azure Agents Control Plane runtime architecture:
 
 ![Agent Control Plane ](../runtime.svg)
+
+The diagram is read from left to right where callers like M365 Copilot or MCP‑compatible APIs invoke agents in the control plane.
 
 ### Why Azure as the Enterprise Control Plane?
 
