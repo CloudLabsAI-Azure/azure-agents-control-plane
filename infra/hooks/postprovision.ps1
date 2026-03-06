@@ -17,7 +17,7 @@ $foundryProjectEndpoint = $envValues.FOUNDRY_PROJECT_ENDPOINT.Trim('"')
 $foundryModelDeploymentName = $envValues.FOUNDRY_MODEL_DEPLOYMENT_NAME.Trim('"')
 $embeddingModelDeploymentName = $envValues.EMBEDDING_MODEL_DEPLOYMENT_NAME.Trim('"')
 $cosmosDbEndpoint = $envValues.COSMOSDB_ENDPOINT.Trim('"')
-$cosmosDbDatabaseName = $envValues.COSMOSDB_DATABASE_NAME.Trim('"')
+$cosmosDbDatabaseName = if ($envValues.COSMOSDB_DATABASE_NAME) { $envValues.COSMOSDB_DATABASE_NAME.Trim('"') } else { 'mcpdb' }
 $azureSearchEndpoint = $envValues.AZURE_SEARCH_ENDPOINT.Trim('"')
 $azureSearchIndexName = $envValues.AZURE_SEARCH_INDEX_NAME.Trim('"')
 # Fabric configuration
