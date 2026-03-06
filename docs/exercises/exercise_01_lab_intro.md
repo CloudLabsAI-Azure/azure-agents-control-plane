@@ -23,7 +23,7 @@ By completing this lab, you will learn how to:
 ### Enterprise Governance
 - Understand how Azure API Management acts as the governance gateway
 - Inspect APIM policies that enforce rate limits, quotas, and compliance with enterprise standards
-- Trace requests through the control plane using distributed tracing
+- Trace requests through the control plane
 
 ### Security & Identity
 - Learn how identities are used for agents running in AKS pods
@@ -32,7 +32,7 @@ By completing this lab, you will learn how to:
 
 ### Observability
 - Monitor agent behavior using Azure Monitor and Application Insights
-- Query telemetry with Kusto Query Language (KQL)
+- Browse or Query telemetry with Kusto Query Language (KQL)
 
 ### Evaluation & Fine-Tuning
 - Capture agent episodes for training data collection
@@ -50,6 +50,8 @@ The Azure Agents Control Plane provides centralized security, governance, and ob
 
 ![Agent Software Development Lifecycle](../../runtime.svg)
 
+The diagram is read from left to right where callers like M365 Copilot or MCP‑compatible APIs invoke agents in the control plane.
+
 ### Architecture Components
 
 The control plane is composed of Azure services that each fulfill a distinct role — from API governance and identity to memory and observability. Together, they form a layered architecture where every agent request is authenticated, authorized, planned, actioned, logged, and traceable.
@@ -65,6 +67,31 @@ The control plane is composed of Azure services that each fulfill a distinct rol
 | Identity | Microsoft Entra ID | Agent identity, RBAC |
 | Observability | Azure Monitor + App Insights | Metrics, traces, logs |
 
+### GitHub Copilot Agent Mode in VS Code
+
+Throughout this lab you will use **GitHub Copilot in Agent Mode** to generate code, run terminal commands, and iterate on your agent implementation — all from within VS Code. The following walkthrough shows the GitHub Copilot in Agent Mode Approvals interactions.
+
+**Step 1 — Open Copilot Chat and Select Agent Mode**
+
+Open the Copilot Chat panel (`Ctrl+Alt+I`) and select **Agent** from the mode dropdown at the top of the chat window. Agent Mode allows Copilot to execute multi-step tasks: it can read files, run terminal commands, edit code, and chain actions together autonomously.
+
+**Step 2 — Enter a Prompt and Review the Plan**
+
+Type your prompt in the chat input — for example, *"Check that I have the prerequisites installed."* Copilot will propose a plan of actions (terminal commands, file reads, etc.). You can also set Copilot to auto approve by through the following actions:
+
+![Approvals1](media/1.png)
+
+![Approvals2](media/2.png)
+
+And then choose which level of approval e.g. Allow All Commands in this Session
+
+![Approvals3](media/3.png)
+
+**Step 3 — Copilot Executes and Reports Results**
+
+Copilot runs the commands in VS Code's integrated terminal, captures the output, and reports the results directly in the chat panel. If any step fails, Copilot will suggest corrective actions you can either have auto-approved or manually approve and execute.
+
+
 ### SpecKit Methodology
 
 SpecKit is a specification-driven development methodology that ensures all agents are properly defined before implementation. Rather than jumping straight into code, SpecKit requires you to first articulate what your agent does, what tools it exposes, its governance model, and its expected behavior — all in a structured specification document.
@@ -74,17 +101,17 @@ The project is organized around two key artifacts:
 - **Constitution** — The governance framework that applies to all agents in the project. It defines shared principles such as security posture, naming conventions, MCP compliance requirements, and approval policies. Every agent specification must conform to the constitution.
 - **Specifications** — Individual agent definitions that describe the agent's domain, tools, input/output schemas, risk levels, and test criteria. In Exercise 2, you will write your own specification before generating any implementation code.
 
-.speckit/
-├── constitution.md           # Core principles and governance framework
-└── specifications/           # Individual agent specifications
-    ├── customer_churn_agent.spec.md
-    ├── devops_cicd_pipeline_agent.spec.md
-    └── your_agent.spec.md    # Your agent specification (Exercise 2)
+- `.speckit/`
+  - `constitution.md`           # Core principles and governance framework
+  - `specifications/`           # Individual agent specifications
+    - `customer_churn_agent.spec.md`
+    - `devops_cicd_pipeline_agent.spec.md`
+    - `your_agent.spec.md`    # Your agent specification (Exercise 2)
 
 The SpecKit workflow follows this sequence:
 
 1. **Review the constitution** to understand the rules your agent must follow
-2. **Write a specification** describing your agent's purpose, tools, and governance model
+2. **Update/Write a specification** describing your agent's purpose, tools, and governance model
 3. **Use GitHub Copilot** to generate implementation code from the specification
 4. **Validate** that the implementation matches the specification through testing
 
@@ -95,6 +122,10 @@ You will work hands-on with SpecKit in Exercise 2: Build Agents.
 ## Step 1.3: Validate Environment
 
 Use **GitHub Copilot in Agent Mode** to complete each validation step below. Open Copilot Chat (`Ctrl+Alt+I`), select **Agent** mode from the dropdown, and enter the prompts listed for each step. Copilot will run the commands in VS Code's integrated terminal and help you resolve any issues.
+
+### Auto Approving Agent Actions
+
+
 
 ### Prerequisites Check
 
