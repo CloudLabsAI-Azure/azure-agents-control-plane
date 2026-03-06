@@ -224,20 +224,58 @@ def print_task_result(result: Dict[str, Any]) -> bool:
         # Plan
         plan = data.get('plan', {})
         steps = plan.get('steps', [])
-        total_steps = plan.get('total_steps', len(steps))
+        total_steps = plan.get('total_steps', len(steps) if isinstance(steps, list) else 0)
         
         print(f"\n📊 Generated Plan ({total_steps} steps):")
         print("-" * 40)
         
-        for step in steps:
-            step_num = step.get('step', '?')
-            action = step.get('action', 'Unknown')
-            description = step.get('description', 'No description')
-            effort = step.get('estimated_effort', 'N/A')
+        # Handle case where LLM returns a structured dict instead of a list of steps
+        if isinstance(steps, dict):
+            # LLM returned {"status": ..., "results": ..., "actions_taken": ..., ...}
+            status = steps.get('status', 'N/A')
+            print(f"\n   Status: {status}")
             
-            print(f"\n   Step {step_num}: {action}")
-            print(f"   Description: {description[:100]}...")
-            print(f"   Effort: {effort}")
+            results = steps.get('results', {})
+            if results:
+                print(f"   Results:")
+                if isinstance(results, dict):
+                    for key, value in list(results.items())[:5]:
+                        print(f"      {key}: {str(value)[:100]}")
+                else:
+                    print(f"      {str(results)[:200]}")
+            
+            actions = steps.get('actions_taken', [])
+            if actions:
+                print(f"   Actions Taken:")
+                for j, action in enumerate(actions[:5], 1):
+                    if isinstance(action, dict):
+                        print(f"      {j}. {action.get('action', action.get('description', str(action)[:100]))}")
+                    else:
+                        print(f"      {j}. {str(action)[:100]}")
+            
+            recommendations = steps.get('recommendations', [])
+            if recommendations:
+                print(f"   Recommendations:")
+                for j, rec in enumerate(recommendations[:5], 1):
+                    if isinstance(rec, dict):
+                        print(f"      {j}. {rec.get('recommendation', rec.get('description', str(rec)[:100]))}")
+                    else:
+                        print(f"      {j}. {str(rec)[:100]}")
+        elif isinstance(steps, list):
+            for step in steps:
+                if isinstance(step, dict):
+                    step_num = step.get('step', '?')
+                    action = step.get('action', 'Unknown')
+                    description = step.get('description', 'No description')
+                    effort = step.get('estimated_effort', 'N/A')
+                    
+                    print(f"\n   Step {step_num}: {action}")
+                    print(f"   Description: {description[:100]}...")
+                    print(f"   Effort: {effort}")
+                else:
+                    print(f"\n   • {str(step)[:150]}")
+        else:
+            print(f"   {str(steps)[:300]}")
         
         # Metadata
         metadata = data.get('metadata', {})

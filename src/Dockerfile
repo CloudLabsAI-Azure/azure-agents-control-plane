@@ -18,6 +18,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY next_best_action_agent.py .
 
+# Copy and run compatibility patch for azure-ai-projects API changes
+COPY patch_compat.py .
+RUN python patch_compat.py
+
 # Copy memory module
 COPY memory/ ./memory/
 
