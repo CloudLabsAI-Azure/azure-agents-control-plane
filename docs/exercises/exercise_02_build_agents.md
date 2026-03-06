@@ -18,17 +18,18 @@ In VS Code Explorer, navigate to and open `.speckit/constitution.md`.
 
 ### Step A.2: Identify Key Elements
 
-As you review, take note at a high-level the key take-home points:
+As you review, take note at a high-level concepts that stand out in the following sections:
 
-| Element | Your Findings |
-|---------|---------------|
-| Project Overview | |
-| Core Principles | |
-| Development Standards | |
-| Technical Architecture | |
-| Success Criteria | |
-| Constraints & Assumptions | |
-| Governance | |
+- **Project Overview**
+- **Core Principles**
+- **Development Standards**
+- **Technical Architecture**
+- **Success Criteria**
+- **Constraints & Assumptions**
+- **Governance**
+- **Solution Architecture Summary**
+- **Lab Integration**
+- **References**
 
 ### Step A.3: Review Example Specifications
 
@@ -40,20 +41,19 @@ In VS Code Explorer, navigate to and open the following files:
 - `.speckit/specifications/user_security_agent.spec.mdd`
 
 The first document: - `.speckit/specifications/healthcare_digital_quality_agent.spec.md` is what was used to build the existing next best action agent. 
-
-what did you make of the specifications? What aspects of specification will you re-use for your use-case?
+Review the specifications. What do you make of the specifications? What aspects of specification will you re-use for your use-case?
 ---
 
 ## Part B: Build Autonomous Agent
 
 ### Step B.1: Create Agent Specification with GitHub Copilot.
 
-Brainstorm what you want your agent to be / done. 
+Brainstorm what you want your agent to be / do. 
 For the purposes of this exercise, there is no user interface for the agent. 
 The agent is a python script that can accept an english based description of a task. 
 It can then determine the intent of the task, reason and plan out steps to be done and then execute on them. Keep in mind, this agent of yours needs to be given boundaries an identity and RBAC permissions to resources / tools for it to perform its job. 
 
-You'll need to invent or select an existing use case:
+You'll need to document a new specification or select an existing use case:
 
 - `.speckit/specifications/customer_churn_agent.spec.md`
 - `.speckit/specifications/devops_cicd_pipeline_agent.spec.md`
@@ -64,7 +64,10 @@ Now please move onto the next step of using GitHub Copilot and Claude Opus 4.6 t
 
 In VS Code Explorer, navigate to and open `.speckit/specifications`.
 
-Start from scratch:
+If you want to start from scratch then follow these instructions.
+Be sure to edit the following with the actual use case information:
+- <responsbility_of_your_agent>
+- <do x,y,z>
 
 Copilot Prompt:
 
@@ -80,17 +83,21 @@ The specification should include:
 - Security Requirements
 ```
 
-If you want to alter an existing specification.
-
+If you want to alter an existing specification then follow these instructions.
+Be sure to edit the following with the actual use case information:
+- <use_case_file_root>
+- <x,y,z>
 Copilot Prompt:
 
 ```
-Make a copy of the .speckit/specifications/<>.spec.md. Make the following changes to it: x,y,z.
+Make a copy of the .speckit/specifications/<use_case_file_root>.spec.md. Make the following changes to it: <x,y,z>.
 ```
+
+Whether you create a new specification from scratch or made changes to an existing specification, either way, you should end up in a position with specification that can now be used to create your agent. 
 
 ### Step B.2: Implement Autonomous Agent, Unit Test(s) and Functional Test(s) with Copilot
 
-For reference, review the existing `src/next_best_action_agent.py`, `src/next_best_action_agent_unit.py`, `src/next_best_action_agent_functional.py` — this is the implementation built from the `healthcare_digital_quality_agent.spec.md` specification. This reference implementation should be used as a pattern for your own agent.
+For reference, if you are included, review the existing `src/next_best_action_agent.py`, `src/next_best_action_agent_unit.py`, `src/next_best_action_agent_functional.py` . There are the files that are built from the `healthcare_digital_quality_agent.spec.md` specification. This reference implementation can be used as a pattern for your own agent.
 
 To create the agent,
 Copilot Prompt:
