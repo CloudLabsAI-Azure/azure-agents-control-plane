@@ -97,7 +97,7 @@ Establish baseline scores on the **base model** before any fine-tuning. These sc
 Copilot Prompt:
 
 ```
-Set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Then check if a .venv virtual environment exists in the project root — if it doesnt, create one. Activate it, install the dependencies from src/requirements.txt, and run the baseline evaluation using: python -m evals.evaluate_next_best_action --data evals/next_best_action_eval_data.jsonl --out evals/eval_results --direct --strict. After the evaluation completes, read the generated evals/eval_results/eval_summary_*.json file and display the baseline scores for Intent Resolution, Tool Call Accuracy, and Task Adherence.
+First, ensure the autonomous-agent deployment in the mcp-agents namespace is using the base model by setting USE_TUNED_MODEL=false: run kubectl set env deployment/autonomous-agent USE_TUNED_MODEL=false -n mcp-agents, then restart the deployment with kubectl rollout restart deployment/autonomous-agent -n mcp-agents and wait for the rollout to complete. Then set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Check if a .venv virtual environment exists in the project root — if it doesnt, create one. Activate it, install the dependencies from src/requirements.txt, and run the baseline evaluation using: python -m evals.evaluate_next_best_action --data evals/next_best_action_eval_data.jsonl --out evals/eval_results --direct --strict. After the evaluation completes, read the generated evals/eval_results/eval_summary_*.json file and display the baseline scores for Intent Resolution, Tool Call Accuracy, and Task Adherence.
 ```
 
 ### Review Baseline Results
@@ -338,7 +338,7 @@ Run the **same evaluation dataset** from Step 4.2 against the fine-tuned model. 
 Copilot Prompt:
 
 ```
-Run the post-training evaluation using the same dataset and thresholds as the baseline in Step 4.2. Set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Then activate the .venv and run: python -m evals.evaluate_next_best_action --data evals/autonomous_agent_eval.jsonl --out evals/eval_results --direct --strict. After the evaluation completes, read the generated eval_summary JSON and compare the scores against the baseline results from Step 4.2. Display a before/after comparison table.
+First, ensure the autonomous-agent deployment in the mcp-agents namespace is using the fine-tuned model by setting USE_TUNED_MODEL=true: run kubectl set env deployment/autonomous-agent USE_TUNED_MODEL=true -n mcp-agents, then restart the deployment with kubectl rollout restart deployment/autonomous-agent -n mcp-agents and wait for the rollout to complete. Then run the post-training evaluation using the same dataset and thresholds as the baseline in Step 4.2. Set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Activate the .venv and run: python -m evals.evaluate_next_best_action --data evals/autonomous_agent_eval.jsonl --out evals/eval_results --direct --strict. After the evaluation completes, read the generated eval_summary JSON and compare the scores against the baseline results from Step 4.2. Display a before/after comparison table.
 ```
 
 ### Compare Before/After Results

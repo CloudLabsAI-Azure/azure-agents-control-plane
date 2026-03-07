@@ -123,7 +123,7 @@ Whether you create a new specification from scratch, made changes to an existing
 
 ### Step B.2: Implement Autonomous Agent, Unit Test(s) and Functional Test(s) with Copilot
 
-For reference, if you are included, review the existing `src/next_best_action_agent.py`, `src/next_best_action_agent_unit.py`, `src/next_best_action_agent_functional.py` . There are the files that are built from the `healthcare_digital_quality_agent.spec.md` specification. This reference implementation can be used as a pattern for your own agent.
+For reference, if you are inclined, review the code in the following files: `src/next_best_action_agent.py`, `src/next_best_action_agent_unit.py`, `src/next_best_action_agent_functional.py`. There are the files that are built from the `healthcare_digital_quality_agent.spec.md` specification. Its more of a catalog of methods than an official reference implementation but the functionality can be re-used as a template for your own agent. Note: clean-up, refactoring of these files are needed. Some of implementation choices were done so to accommodate the lab environment itself. 
 
 To create the agent,
 Copilot Prompt:
