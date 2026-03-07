@@ -5372,16 +5372,24 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                 # Run evaluation
                 result = evaluator(query=query, response=response)
                 
+                # Handle string scores from evaluator SDK
+                score = result.get("intent_resolution", 0)
+                if isinstance(score, str):
+                    try:
+                        score = int(float(score))
+                    except (ValueError, TypeError):
+                        score = 0
+                
                 return MCPToolResult(
                     content=[{
                         "type": "text",
                         "text": json.dumps({
                             "evaluator": "IntentResolutionEvaluator",
                             "query": query[:100] + "..." if len(query) > 100 else query,
-                            "score": result.get("intent_resolution", 0),
+                            "score": score,
                             "explanation": result.get("intent_resolution_reason", ""),
                             "threshold_recommendation": 3,
-                            "passed": result.get("intent_resolution", 0) >= 3
+                            "passed": score >= 3
                         }, indent=2)
                     }]
                 )
@@ -5444,6 +5452,14 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                     tool_definitions=tool_definitions
                 )
                 
+                # Handle string scores from evaluator SDK
+                score = result.get("tool_call_accuracy", 0)
+                if isinstance(score, str):
+                    try:
+                        score = int(float(score))
+                    except (ValueError, TypeError):
+                        score = 0
+                
                 return MCPToolResult(
                     content=[{
                         "type": "text",
@@ -5451,10 +5467,10 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                             "evaluator": "ToolCallAccuracyEvaluator",
                             "query": query[:100] + "..." if len(query) > 100 else query,
                             "tool_calls_count": len(tool_calls),
-                            "score": result.get("tool_call_accuracy", 0),
+                            "score": score,
                             "explanation": result.get("tool_call_accuracy_reason", ""),
                             "threshold_recommendation": 3,
-                            "passed": result.get("tool_call_accuracy", 0) >= 3
+                            "passed": score >= 3
                         }, indent=2)
                     }]
                 )
@@ -5705,6 +5721,12 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                     intent_eval = IntentResolutionEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
                     intent_result = intent_eval(query=query, response=response)
                     intent_score = intent_result.get("intent_resolution", 0)
+                    # Handle string scores from evaluator SDK
+                    if isinstance(intent_score, str):
+                        try:
+                            intent_score = int(float(intent_score))
+                        except (ValueError, TypeError):
+                            intent_score = 0
                     results["evaluations"]["intent_resolution"] = {
                         "score": intent_score,
                         "threshold": thresholds.get("intent_resolution", 3),
@@ -5723,6 +5745,12 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                         tool_eval = ToolCallAccuracyEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
                         tool_result = tool_eval(query=query, tool_calls=tool_calls, tool_definitions=tool_definitions)
                         tool_score = tool_result.get("tool_call_accuracy", 0)
+                        # Handle string scores from evaluator SDK
+                        if isinstance(tool_score, str):
+                            try:
+                                tool_score = int(float(tool_score))
+                            except (ValueError, TypeError):
+                                tool_score = 0
                         results["evaluations"]["tool_call_accuracy"] = {
                             "score": tool_score,
                             "threshold": thresholds.get("tool_call_accuracy", 3),
