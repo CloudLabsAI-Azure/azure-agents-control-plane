@@ -201,6 +201,7 @@ sessions: Dict[str, Dict[str, Any]] = {}
 FOUNDRY_PROJECT_ENDPOINT = os.getenv("FOUNDRY_PROJECT_ENDPOINT", "")
 FOUNDRY_MODEL_DEPLOYMENT_NAME = os.getenv("FOUNDRY_MODEL_DEPLOYMENT_NAME", "gpt-4o-mini")
 EVALUATOR_MODEL_DEPLOYMENT_NAME = os.getenv("EVALUATOR_MODEL_DEPLOYMENT_NAME", "gpt-5.2-chat")
+EVALUATOR_IS_REASONING_MODEL = os.getenv("EVALUATOR_IS_REASONING_MODEL", "true").lower() == "true"
 EMBEDDING_MODEL_DEPLOYMENT_NAME = os.getenv("EMBEDDING_MODEL_DEPLOYMENT_NAME", "text-embedding-3-large")
 
 # Agent Lightning configuration for fine-tuning and behavior optimization
@@ -5366,19 +5367,11 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                 
                 # Initialize evaluator with managed identity credential
                 credential = DefaultAzureCredential()
-                # Use is_reasoning_model=True for gpt-5.x evaluator model that supports max_completion_tokens
-                evaluator = IntentResolutionEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
+                # Use is_reasoning_model=EVALUATOR_IS_REASONING_MODEL for gpt-5.x evaluator model that supports max_completion_tokens
+                evaluator = IntentResolutionEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
                 
                 # Run evaluation
                 result = evaluator(query=query, response=response)
-                
-                # Handle string scores from evaluator SDK
-                score = result.get("intent_resolution", 0)
-                if isinstance(score, str):
-                    try:
-                        score = int(float(score))
-                    except (ValueError, TypeError):
-                        score = 0
                 
                 return MCPToolResult(
                     content=[{
@@ -5386,10 +5379,10 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                         "text": json.dumps({
                             "evaluator": "IntentResolutionEvaluator",
                             "query": query[:100] + "..." if len(query) > 100 else query,
-                            "score": score,
+                            "score": result.get("intent_resolution", 0),
                             "explanation": result.get("intent_resolution_reason", ""),
                             "threshold_recommendation": 3,
-                            "passed": score >= 3
+                            "passed": result.get("intent_resolution", 0) >= 3
                         }, indent=2)
                     }]
                 )
@@ -5443,22 +5436,14 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                 }
                 
                 credential = DefaultAzureCredential()
-                # Use is_reasoning_model=True for gpt-5.x evaluator model that supports max_completion_tokens
-                evaluator = ToolCallAccuracyEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
+                # Use is_reasoning_model=EVALUATOR_IS_REASONING_MODEL for gpt-5.x evaluator model that supports max_completion_tokens
+                evaluator = ToolCallAccuracyEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
                 
                 result = evaluator(
                     query=query,
                     tool_calls=tool_calls,
                     tool_definitions=tool_definitions
                 )
-                
-                # Handle string scores from evaluator SDK
-                score = result.get("tool_call_accuracy", 0)
-                if isinstance(score, str):
-                    try:
-                        score = int(float(score))
-                    except (ValueError, TypeError):
-                        score = 0
                 
                 return MCPToolResult(
                     content=[{
@@ -5467,10 +5452,10 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                             "evaluator": "ToolCallAccuracyEvaluator",
                             "query": query[:100] + "..." if len(query) > 100 else query,
                             "tool_calls_count": len(tool_calls),
-                            "score": score,
+                            "score": result.get("tool_call_accuracy", 0),
                             "explanation": result.get("tool_call_accuracy_reason", ""),
                             "threshold_recommendation": 3,
-                            "passed": score >= 3
+                            "passed": result.get("tool_call_accuracy", 0) >= 3
                         }, indent=2)
                     }]
                 )
@@ -5515,8 +5500,8 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                 }
                 
                 credential = DefaultAzureCredential()
-                # Use is_reasoning_model=True for gpt-5.x evaluator model that supports max_completion_tokens
-                evaluator = TaskAdherenceEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
+                # Use is_reasoning_model=EVALUATOR_IS_REASONING_MODEL for gpt-5.x evaluator model that supports max_completion_tokens
+                evaluator = TaskAdherenceEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
                 
                 # Build kwargs for evaluator
                 eval_kwargs = {
@@ -5581,7 +5566,7 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                 }
                 
                 credential = DefaultAzureCredential()
-                evaluator = GroundednessEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
+                evaluator = GroundednessEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
                 
                 result = evaluator(query=query, response=response, context=context)
                 
@@ -5636,7 +5621,7 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                 }
                 
                 credential = DefaultAzureCredential()
-                evaluator = RelevanceEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
+                evaluator = RelevanceEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
                 
                 result = evaluator(query=query, response=response)
                 
@@ -5718,15 +5703,9 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                 
                 # Run IntentResolutionEvaluator
                 try:
-                    intent_eval = IntentResolutionEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
+                    intent_eval = IntentResolutionEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
                     intent_result = intent_eval(query=query, response=response)
                     intent_score = intent_result.get("intent_resolution", 0)
-                    # Handle string scores from evaluator SDK
-                    if isinstance(intent_score, str):
-                        try:
-                            intent_score = int(float(intent_score))
-                        except (ValueError, TypeError):
-                            intent_score = 0
                     results["evaluations"]["intent_resolution"] = {
                         "score": intent_score,
                         "threshold": thresholds.get("intent_resolution", 3),
@@ -5742,15 +5721,9 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                 # Run ToolCallAccuracyEvaluator (if tool_calls provided)
                 if tool_calls:
                     try:
-                        tool_eval = ToolCallAccuracyEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
+                        tool_eval = ToolCallAccuracyEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
                         tool_result = tool_eval(query=query, tool_calls=tool_calls, tool_definitions=tool_definitions)
                         tool_score = tool_result.get("tool_call_accuracy", 0)
-                        # Handle string scores from evaluator SDK
-                        if isinstance(tool_score, str):
-                            try:
-                                tool_score = int(float(tool_score))
-                            except (ValueError, TypeError):
-                                tool_score = 0
                         results["evaluations"]["tool_call_accuracy"] = {
                             "score": tool_score,
                             "threshold": thresholds.get("tool_call_accuracy", 3),
@@ -5767,7 +5740,7 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                 
                 # Run TaskAdherenceEvaluator
                 try:
-                    task_eval = TaskAdherenceEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
+                    task_eval = TaskAdherenceEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
                     eval_kwargs = {"query": query, "response": response}
                     if tool_calls:
                         eval_kwargs["tool_calls"] = tool_calls
@@ -5790,7 +5763,7 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                 # Run GroundednessEvaluator (if context provided)
                 if context:
                     try:
-                        groundedness_eval = GroundednessEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
+                        groundedness_eval = GroundednessEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
                         ground_result = groundedness_eval(query=query, response=response, context=context)
                         ground_score = ground_result.get("groundedness", 0)
                         if isinstance(ground_score, str):
@@ -5814,7 +5787,7 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                 
                 # Run RelevanceEvaluator
                 try:
-                    relevance_eval = RelevanceEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
+                    relevance_eval = RelevanceEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
                     rel_result = relevance_eval(query=query, response=response)
                     rel_score = rel_result.get("relevance", 0)
                     if isinstance(rel_score, str):
@@ -5887,12 +5860,12 @@ async def _execute_tool_impl(tool_name: str, arguments: Dict[str, Any]) -> MCPTo
                 credential = DefaultAzureCredential()
                 
                 # Initialize evaluators once
-                # Use is_reasoning_model=True for gpt-5.x evaluator model that supports max_completion_tokens
-                intent_eval = IntentResolutionEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
-                tool_eval = ToolCallAccuracyEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
-                task_eval = TaskAdherenceEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
-                groundedness_eval = GroundednessEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
-                relevance_eval = RelevanceEvaluator(model_config=model_config, credential=credential, is_reasoning_model=True)
+                # Use is_reasoning_model=EVALUATOR_IS_REASONING_MODEL for gpt-5.x evaluator model that supports max_completion_tokens
+                intent_eval = IntentResolutionEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
+                tool_eval = ToolCallAccuracyEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
+                task_eval = TaskAdherenceEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
+                groundedness_eval = GroundednessEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
+                relevance_eval = RelevanceEvaluator(model_config=model_config, credential=credential, is_reasoning_model=EVALUATOR_IS_REASONING_MODEL)
                 
                 # Default tool definitions
                 default_tool_defs = [
