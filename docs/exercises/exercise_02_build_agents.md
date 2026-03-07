@@ -13,6 +13,14 @@ In this exercise, you will use GitHub Copilot and the SpecKit to specify, create
 >
 > ![New Chat Session](media/4.png)
 
+> [TIP]
+> **Copilot May Pause and Ask to Continue**
+>
+> For longer tasks, Copilot may stop partway through and ask if you'd like it to continue. Keep an eye on the chat panel — when you see a prompt asking to proceed, click **Continue** to let Copilot finish its work.
+>
+> ![Continue Prompt](media/5.png)
+
+
 ---
 
 ## Part A: Review the Project Constitution
@@ -121,7 +129,7 @@ To create the agent,
 Copilot Prompt:
 
 ```
-Implement an MCP-compliant FastAPI agent based on the <autonomous_agent.spec.md> specification. Utilize src/next_best_action_agent.py as a reference implementation. Build the implementation similar to the reference implementation but in its own new file src/autonomous_agent.py. Be sure to include health endpoint, SSE endpoint, and message endpoint with tools/list and tools/call handlers. Also create pytest unit tests in tests/test_autonomous_agent_unit.py covering the health endpoint, MCP initialize, tools/list, and tools/call methods. Create functional tests in tests/test_autonomous_agent_functional.py covering the health endpoint, MCP initialize, tools/list, and tools/call methods. Make a new DockerFile specific to this new agent. Make a new k8s/autonomous-agent-deployment.yaml config file too.
+Implement an MCP-compliant FastAPI agent based on the <autonomous_agent.spec.md> specification. Utilize src/next_best_action_agent.py as a reference implementation. Build the implementation similar to the reference implementation but in its own new file src/autonomous_agent.py. Be sure to include health endpoint, SSE endpoint, and message endpoint with tools/list and tools/call handlers. In addition to the domain-specific tools, include all of the Agent Lightning tools from the reference implementation (lightning_list_episodes, lightning_get_episode, lightning_assign_reward, lightning_list_rewards, lightning_build_dataset, lightning_list_datasets, lightning_start_training, lightning_get_training_status, lightning_list_training_runs, lightning_promote_deployment, lightning_get_active_deployment, lightning_list_deployments, lightning_rollback_deployment, lightning_deactivate_deployment, lightning_get_stats). These Lightning tools enable fine-tuning and reinforcement learning capabilities — include the Lightning imports, tool function definitions, tool catalog entries in tools/list, and tool dispatch handlers in tools/call exactly as they appear in the reference implementation. Also create pytest unit tests in tests/test_autonomous_agent_unit.py covering the health endpoint, MCP initialize, tools/list, and tools/call methods. Create functional tests in tests/test_autonomous_agent_functional.py covering the health endpoint, MCP initialize, tools/list, and tools/call methods. Make a new DockerFile specific to this new agent. Make a new k8s/autonomous-agent-deployment.yaml config file too.
 ```
 
 ### Step B.3: Generate Domain Knowledge Facts with Copilot
