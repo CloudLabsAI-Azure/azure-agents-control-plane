@@ -6,6 +6,13 @@
 
 In this exercise, you will use GitHub Copilot and the SpecKit to specify, create, unit test, and deploy an **Autonomous Agent** that operates independently without human intervention.
 
+> [TIP]
+> **Managing Copilot Chat Sessions**
+>
+> Start a **new Copilot chat session** after completing each logical stopping point (e.g. after finishing a Part or a major Step). This keeps the context window focused and prevents earlier conversation history from confusing later prompts. To start a new session, click the **+** button at the top of the Copilot Chat panel.
+>
+> ![New Chat Session](media/4.png)
+
 ---
 
 ## Part A: Review the Project Constitution
@@ -60,6 +67,8 @@ You'll need to document a new specification or select an existing use case:
 - `.speckit/specifications/user_security_agent.spec.mdd`
 
 Now please move onto the next step of using GitHub Copilot and Claude Opus 4.6 to help you review, write, adjust your SpecKit specification and then build it. 
+
+
 
 In VS Code Explorer, navigate to and open `.speckit/specifications`.
 
