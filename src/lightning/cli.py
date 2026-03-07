@@ -373,6 +373,158 @@ def cmd_health(args):
     return 0
 
 
+def cmd_compare_versions(args):
+    """Compare episode quality and eval metrics before and after fine-tuning."""
+    ledger = get_rl_ledger()
+
+    before_date = args.before_date
+    after_date = args.after_date
+    agent_id = args.agent_id
+    eval_dir = Path(args.eval_dir) if args.eval_dir else Path("evals/eval_results")
+
+    # ── 1. Query episodes from Cosmos before / after ──
+    print(f"\n{'=' * 72}")
+    print(f" EPISODE QUALITY COMPARISON — agent: {agent_id}")
+    print(f"{'=' * 72}")
+    print(f"  Before window:  created_at < {before_date}")
+    print(f"  After  window:  created_at >= {after_date}")
+
+    before_episodes = ledger.query_episodes(
+        agent_id=agent_id, end_date=before_date, limit=500,
+    )
+    after_episodes = ledger.query_episodes(
+        agent_id=agent_id, start_date=after_date, limit=500,
+    )
+
+    def _episode_stats(episodes):
+        """Compute per-episode reward stats."""
+        total_rewards = []
+        source_buckets = {}
+        for ep in episodes:
+            rewards = ledger.get_rewards_for_episode(ep.id, agent_id)
+            for r in rewards:
+                total_rewards.append(r.value)
+                src = r.source.value if hasattr(r.source, 'value') else str(r.source)
+                source_buckets.setdefault(src, []).append(r.value)
+        avg = sum(total_rewards) / len(total_rewards) if total_rewards else 0.0
+        return {
+            "episode_count": len(episodes),
+            "reward_count": len(total_rewards),
+            "avg_reward": avg,
+            "source_buckets": {
+                k: round(sum(v) / len(v), 3) for k, v in source_buckets.items()
+            },
+        }
+
+    before_stats = _episode_stats(before_episodes)
+    after_stats = _episode_stats(after_episodes)
+
+    print(f"\n{'─' * 72}")
+    print(f"  {'Metric':<30} {'Before':>12} {'After':>12} {'Delta':>12}")
+    print(f"{'─' * 72}")
+    print(f"  {'Episodes':<30} {before_stats['episode_count']:>12} {after_stats['episode_count']:>12} {'':>12}")
+    print(f"  {'Reward signals':<30} {before_stats['reward_count']:>12} {after_stats['reward_count']:>12} {'':>12}")
+
+    b_avg = before_stats['avg_reward']
+    a_avg = after_stats['avg_reward']
+    delta_r = a_avg - b_avg
+    arrow = "▲" if delta_r > 0 else ("▼" if delta_r < 0 else "─")
+    print(f"  {'Avg Reward':<30} {b_avg:>12.3f} {a_avg:>12.3f} {arrow} {delta_r:>+.3f}")
+
+    # Per-source breakdown
+    all_sources = sorted(set(list(before_stats['source_buckets']) + list(after_stats['source_buckets'])))
+    for src in all_sources:
+        bv = before_stats['source_buckets'].get(src, 0.0)
+        av = after_stats['source_buckets'].get(src, 0.0)
+        d = av - bv
+        ar = "▲" if d > 0 else ("▼" if d < 0 else "─")
+        print(f"    reward/{src:<26} {bv:>12.3f} {av:>12.3f} {ar} {d:>+.3f}")
+
+    # ── 2. Load evaluation summaries ──
+    print(f"\n{'=' * 72}")
+    print(f" EVALUATION SUMMARY COMPARISON")
+    print(f"{'=' * 72}")
+
+    summaries = sorted(eval_dir.glob("eval_summary_*.json"))
+    loaded = []
+    for p in summaries:
+        with open(p) as f:
+            data = json.load(f)
+            data["_file"] = p.name
+            loaded.append(data)
+
+    # Pick the best baseline (earliest with real scores) and latest post-training
+    def _has_scores(s):
+        sm = s.get("summary", {})
+        return sm.get("avg_intent_resolution") is not None and sm.get("avg_intent_resolution", 0) > 0
+
+    baselines = [s for s in loaded if _has_scores(s) and s["timestamp"] < after_date]
+    post_evals = [s for s in loaded if _has_scores(s) and s["timestamp"] >= after_date]
+
+    if not baselines:
+        # Fall back: pick the earliest summary with real scores
+        baselines = [s for s in loaded if _has_scores(s)]
+
+    baseline = baselines[0] if baselines else None
+    post = post_evals[-1] if post_evals else None
+
+    if baseline:
+        print(f"  Baseline file:     {baseline['_file']}  ({baseline['timestamp'][:19]})")
+    else:
+        print("  Baseline file:     (none found with valid scores)")
+    if post:
+        print(f"  Post-training file: {post['_file']}  ({post['timestamp'][:19]})")
+    else:
+        print("  Post-training file: (none found with valid scores)")
+
+    if baseline and post:
+        bs = baseline.get("summary", {})
+        ps = post.get("summary", {})
+
+        metrics = [
+            ("Intent Resolution", "avg_intent_resolution", 5),
+            ("Tool Call Accuracy", "avg_tool_call_accuracy", 5),
+            ("Task Adherence (flagged)", "task_adherence_flagged", None),
+            ("Groundedness", "avg_groundedness", 5),
+            ("Relevance", "avg_relevance", 5),
+        ]
+
+        print(f"\n{'─' * 72}")
+        print(f"  {'Evaluator':<30} {'Baseline':>12} {'Post-FT':>12} {'Delta':>12}")
+        print(f"{'─' * 72}")
+
+        for label, key, scale in metrics:
+            bv = bs.get(key, 0) or 0
+            pv = ps.get(key, 0) or 0
+
+            if key == "task_adherence_flagged":
+                bt = bs.get("total_evaluated", 10)
+                pt = ps.get("total_evaluated", 12)
+                print(f"  {label:<30} {bv:>8.0f}/{bt:<3} {pv:>8.0f}/{pt:<3} {'':>12}")
+            else:
+                d = pv - bv
+                ar = "▲" if d > 0.001 else ("▼" if d < -0.001 else "─")
+                status = "PASS" if pv >= 3 else "FAIL"
+                print(f"  {label:<30} {bv:>8.2f}/5   {pv:>8.2f}/5   {ar} {d:>+.2f} [{status}]")
+
+        print(f"{'─' * 72}")
+
+        # Overall verdict
+        total_b = bs.get("total_evaluated", 0)
+        total_p = ps.get("total_evaluated", 0)
+        print(f"  {'Total items evaluated':<30} {total_b:>12} {total_p:>12}")
+        print(f"  {'Baseline all_passed':<30} {str(bs.get('all_passed', '?')):>12}")
+        print(f"  {'Post-FT  all_passed':<30} {str(ps.get('all_passed', '?')):>12}")
+    elif not baseline and not post:
+        print("\n  No evaluation summary files with valid scores found in:")
+        print(f"    {eval_dir.resolve()}")
+        print("  Run evaluations first with:")
+        print("    python -m evals.run_evaluations --data evals/autonomous_agent_eval.jsonl --out evals/eval_results --direct --strict --sequential")
+
+    print(f"\n{'=' * 72}")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Agent Lightning CLI - Fine-tuning and behavior optimization"
@@ -457,6 +609,14 @@ def main():
     health = subparsers.add_parser('health', help='Check RL Ledger health')
     health.set_defaults(func=cmd_health)
     
+    # compare-versions command
+    compare = subparsers.add_parser('compare-versions', help='Compare episode quality before and after fine-tuning')
+    compare.add_argument('--agent-id', required=True, help='Agent ID')
+    compare.add_argument('--before-date', required=True, help='ISO datetime cutoff for "before" window (episodes with created_at < this)')
+    compare.add_argument('--after-date', required=True, help='ISO datetime cutoff for "after" window (episodes with created_at >= this)')
+    compare.add_argument('--eval-dir', help='Path to eval_results directory (default: evals/eval_results)')
+    compare.set_defaults(func=cmd_compare_versions)
+
     args = parser.parse_args()
     
     if not args.command:
