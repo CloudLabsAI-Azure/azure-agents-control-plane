@@ -56,6 +56,25 @@ Take note that embeddings have been stored.
 
 Azure AI Search provides vector search for long-term memory retrieval. In this accelerator, Azure AI Foundry's agentic retrieval pipeline powers the agent's long-term memory by indexing durable knowledge sources and knowledge bases that persist beyond any single session. When the agent needs to recall prior experience or domain knowledge, the pipeline performs source selection and query planning across multiple knowledge sources, ranks results through L2/L3 classifiers, and optionally reflects and iterates before merging final results. The pipeline's reasoning effort level (Minimal, Low, or Medium) controls how much computation is applied at each stage—higher levels enable query planning, L3 classification, and reflection/iteration loops for deeper, more accurate retrieval at the cost of additional latency, while lower levels skip those stages for faster responses.
 
+### Temporarily Enable Public Access on AI Search
+
+> [WARNING]
+> The AI Search instance is deployed with public network access **disabled** by default. When you open the service in the Azure portal you will see:
+>
+> *"Restricted access: An admin of your search service has disabled public network access, so some features of the Azure portal may be disabled. You can view and manage service level information, but portal access to indexes, indexers, and other top-level resources may be restricted."*
+>
+> You must temporarily enable public access so the portal (and your local machine) can interact with indexes, knowledge sources, and the agentic retrieval chat panel. **Remember to disable public access again after you finish this exercise** (see the end of this step).
+
+Copilot Prompt:
+
+```
+Temporarily enable public network access on the AI Search instance in the apim-mcp-aks resource group so I can use the Azure portal to browse indexes and knowledge bases. Run:
+
+az search service update -g apim-mcp-aks -n $(az resource list --resource-type Microsoft.Search/searchServices --query "[0].name" -o tsv) --public-access enabled
+```
+
+Copilot will resolve the search service name and enable public access. Once the command succeeds, you can proceed to explore the knowledge base in the portal.
+
 ### Navigate to the Knowledge Base
 
 1. Open Azure Portal
@@ -64,15 +83,11 @@ Azure AI Search provides vector search for long-term memory retrieval. In this a
 
 ### Query the Knowledge Base
 
-In the knowledge base chat panel, enter a query to test retrieval:
+In the knowledge base chat panel, enter a query thats specific to your domain / specification.
 
 ```
 What are the steps for customer churn analysis?
 ```
-
-Review the response and note how the knowledge base retrieves relevant task instructions from the **task-instructions-source** knowledge source.
-
-Try additional queries (and perhaps a question specific to your domain):
 
 ```
 How do I set up a CI/CD Kubernetes pipeline?
@@ -81,6 +96,9 @@ How do I set up a CI/CD Kubernetes pipeline?
 ```
 What is the REST API user management workflow?
 ```
+
+Review the response and note how the knowledge base retrieves relevant task instructions from the **task-instructions-source** knowledge source.
+
 
 ### Review Knowledge Base Configuration
 
@@ -94,6 +112,18 @@ In the left panel, review the following settings:
 | Retrieval mode | Retrieval (recommended) | Uses agentic retrieval with ranking |
 
 > **Note:** If no **Chat completion model** is configured, the reasoning effort must be set to **Minimal**. To use **Low** or **Medium** reasoning effort (which enables query planning, L3 classification, and reflection/iteration), click **+ Add model deployment** and select a deployed chat completion model (e.g., GPT-4o). Without a model, attempting a higher reasoning effort will produce the error: *"A Knowledge Base model must be specified to use any reasoning effort other than 'Minimal'"*.
+
+### Restore Security – Disable Public Access
+
+Once you have finished reviewing AI Search, disable public access to restore the service's security posture.
+
+Copilot Prompt:
+
+```
+Disable public network access on the AI Search instance to restore its security posture. Run:
+
+az search service update -g apim-mcp-aks -n $(az resource list --resource-type Microsoft.Search/searchServices --query "[0].name" -o tsv) --public-access disabled
+```
 
 ---
 
@@ -111,7 +141,7 @@ In this accelerator, ontologies are stored as JSON files and uploaded to a stora
 | `cicd_pipeline_ontology.json` | DevOps | Pipeline failure categories, deployment events, cluster health |
 | `user_management_ontology.json` | API Management | User roles, endpoint schemas, access control patterns |
 
-> **Note:** This step will be fully fleshed out once the Fabric IQ environment is ready. Detailed navigation and query instructions will be added at that time.
+> **Note:** Review the locally generated ontology files under the `facts/ontology/` folder in this repository (e.g. `facts/ontology/<domain>.json`). This step will be fully fleshed out once the Fabric IQ environment is ready.
 
 
 ---
@@ -125,13 +155,14 @@ Azure Monitor collects logs, metrics, and traces from all agents.
 1. Open Azure Portal
 2. Navigate to **Log Analytics Workspaces** → Your workspace
 3. Go to **Logs**
+4. Change from simple to KQL mode
 
 ### Query Agent Logs
 
 > **Note:** This accelerator uses the legacy `ContainerLog` table (v1) rather than `ContainerLogV2`. The v1 table uses `LogEntry` instead of `LogMessage`, and container metadata fields (`Name`, `Image`) may be empty when using the AMA agent with the OMS addon.
 
 
-```kusto
+```
 // Agent container logs (ContainerLog v1)
 ContainerLog
 | where TimeGenerated < ago(60m)
