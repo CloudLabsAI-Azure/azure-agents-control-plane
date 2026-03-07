@@ -24,7 +24,7 @@ Without before/after evaluation, you cannot distinguish a model that improved fr
 
 ## Agent Lightning + Evaluation Loop
 
-<pre style="background-color: #f0f0f0; color: #000; padding: 12px; border-radius: 6px;">
+```
 ┌──────────────────────────────────────────────────────────────────────────┐
 │                  FINE-TUNING & EVALUATION CLOSED LOOP                    │
 ├──────────────────────────────────────────────────────────────────────────┤
@@ -53,7 +53,7 @@ Without before/after evaluation, you cannot distinguish a model that improved fr
 │  └──────────────────────┘                                                │
 │                                                                          │
 └──────────────────────────────────────────────────────────────────────────┘
-</pre>
+```
 
 ---
 
@@ -215,25 +215,22 @@ Build a fine-tuning dataset from labeled episodes for the autonomous-agent. Run:
 
 This creates a JSONL file in the format expected by Azure OpenAI
 
-<pre style="background-color: #f0f0f0; color: #000; padding: 12px; border-radius: 6px;">
-json
-{"messages": [{"role": "system", "content": "You are an analytics agent..."}, {"role": "user", "content": "Analyze customer churn for Q4 2025"}, {"role": "assistant", "content": "..."}]}
-{"messages": [{"role": "system", "content": "..."}, {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]}
-</pre>
+> `{"messages": [{"role": "system", "content": "You are an analytics agent..."}, {"role": "user", "content": "Analyze customer churn for Q4 2025"}, {"role": "assistant", "content": "..."}]}`
+> `{"messages": [{"role": "system", "content": "..."}, {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]}`
 
 ### Expected Dataset Statistics
 
 Copilot will display the dataset info.
 
 Expected output:
-<pre style="background-color: #f0f0f0; color: #000; padding: 12px; border-radius: 6px;">
-Dataset: autonomous-agent-v1
-Episodes: 150
-Avg Reward: 0.82
-Min Reward: 0.70
-Max Reward: 0.98
-Token Count: 45,230
-</pre>
+
+> Dataset: autonomous-agent-v1
+> Episodes: 150
+> Avg Reward: 0.82
+> Min Reward: 0.70
+> Max Reward: 0.98
+> Token Count: 45,230
+
 ---
 
 ## Step 4.8: Start Fine-Tuning Job with Copilot
@@ -257,29 +254,18 @@ Ensure kubectl port-forward is active on port 8000 to mcp-agents. Then activate 
 ```
 
 Expected output:
-<pre style="background-color: #f0f0f0; color: #000; padding: 12px; border-radius: 6px;">
-Monitoring training run: b0a935c0-f6d4-4e97-855e-a9b50dde2c8c
-MCP endpoint: http://localhost:8000/runtime/webhooks/mcp
-Poll interval: 30s | Timeout: 120m
-------------------------------------------------------------
-[13:15:23] Status: running | AOAI: ftjob-50b46088abde49e5869181f7a47b782b
-[13:15:53] Status: running | AOAI: ftjob-50b46088abde49e5869181f7a47b782b
-...
-[13:52:38] Status: succeeded | AOAI: ftjob-50b46088abde49e5869181f7a47b782b | Metrics: training_loss=0.066 | trained_tokens=11367
-------------------------------------------------------------
-Training SUCCEEDED!
-Fine-tuned model: gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
-</pre>
 
-
-Copilot Prompt:
-
-```
-Deploy the model with:
-  python scripts/deploy_finetuned_model.py \
-    --training-run-id <tbd> \
-    --port 8000
-```
+> Monitoring training run: b0a935c0-f6d4-4e97-855e-a9b50dde2c8c
+> MCP endpoint: http://localhost:8000/runtime/webhooks/mcp
+> Poll interval: 30s | Timeout: 120m
+> \------------------------------------------------------------
+> [13:15:23] Status: running | AOAI: ftjob-50b46088abde49e5869181f7a47b782b
+> [13:15:53] Status: running | AOAI: ftjob-50b46088abde49e5869181f7a47b782b
+> ...
+> [13:52:38] Status: succeeded | AOAI: ftjob-50b46088abde49e5869181f7a47b782b | Metrics: training_loss=0.066 | trained_tokens=11367
+> \------------------------------------------------------------
+> Training SUCCEEDED!
+> Fine-tuned model: gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
 
 > **Important**: The `lightning_get_training_status` MCP tool polls the Azure OpenAI API on each call, syncing the real-time status back to Cosmos DB. This ensures the Cosmos record stays current with the actual AOAI job status.
 
@@ -307,32 +293,31 @@ Ensure kubectl port-forward is active on port 8000 to mcp-agents. Then activate 
 ```
 
 Expected output:
-<pre style="background-color: #f0f0f0; color: #000; padding: 12px; border-radius: 6px;">
-============================================================
-Step 1: Checking training run status...
-  Status: succeeded
-  Model:  gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
-  Metrics: {"training_loss": 0.066, "trained_tokens": 11367}
 
-============================================================
-Step 2: Promoting fine-tuned model...
-  Deployment ID: 16b85e61-82e6-4cae-9df7-14c4e449b030
-  Is Active: True
-  Promoted At: 2026-02-16T00:06:22.464282
-
-============================================================
-Step 3: Updating AKS deployment 'mcp-agents'...
-  Set USE_TUNED_MODEL=true
-  Set TUNED_MODEL_NAME=gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
-  Waiting for rollout...
-  Rollout complete!
-  Verified env vars:
-    USE_TUNED_MODEL=true
-    TUNED_MODEL_NAME=gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
-
-============================================================
-Deployment complete!
-</pre>
+> ============================================================
+> Step 1: Checking training run status...
+> &nbsp;&nbsp;Status: succeeded
+> &nbsp;&nbsp;Model: gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
+> &nbsp;&nbsp;Metrics: {"training_loss": 0.066, "trained_tokens": 11367}
+>
+> ============================================================
+> Step 2: Promoting fine-tuned model...
+> &nbsp;&nbsp;Deployment ID: 16b85e61-82e6-4cae-9df7-14c4e449b030
+> &nbsp;&nbsp;Is Active: True
+> &nbsp;&nbsp;Promoted At: 2026-02-16T00:06:22.464282
+>
+> ============================================================
+> Step 3: Updating AKS deployment 'mcp-agents'...
+> &nbsp;&nbsp;Set USE_TUNED_MODEL=true
+> &nbsp;&nbsp;Set TUNED_MODEL_NAME=gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
+> &nbsp;&nbsp;Waiting for rollout...
+> &nbsp;&nbsp;Rollout complete!
+> &nbsp;&nbsp;Verified env vars:
+> &nbsp;&nbsp;&nbsp;&nbsp;USE_TUNED_MODEL=true
+> &nbsp;&nbsp;&nbsp;&nbsp;TUNED_MODEL_NAME=gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
+>
+> ============================================================
+> Deployment complete!
 
 ---
 
