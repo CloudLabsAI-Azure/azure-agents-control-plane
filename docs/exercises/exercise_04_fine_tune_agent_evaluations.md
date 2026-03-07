@@ -338,7 +338,7 @@ Run the **same evaluation dataset** from Step 4.2 against the fine-tuned model. 
 Copilot Prompt:
 
 ```
-Run the post-training evaluation using the same dataset and thresholds as the baseline in Step 4.2. Set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Then activate the .venv and run: python -m evals.evaluate_next_best_action --data evals/next_best_action_eval_data.jsonl --out evals/eval_results --direct --strict. After the evaluation completes, read the generated eval_summary JSON and compare the scores against the baseline results from Step 4.2. Display a before/after comparison table.
+Run the post-training evaluation using the same dataset and thresholds as the baseline in Step 4.2. Set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Then activate the .venv and run: python -m evals.evaluate_next_best_action --data evals/autonomous_agent_eval.jsonl --out evals/eval_results --direct --strict. After the evaluation completes, read the generated eval_summary JSON and compare the scores against the baseline results from Step 4.2. Display a before/after comparison table.
 ```
 
 ### Compare Before/After Results
