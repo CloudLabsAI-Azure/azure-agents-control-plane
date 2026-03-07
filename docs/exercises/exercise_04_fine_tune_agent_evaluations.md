@@ -157,7 +157,7 @@ Set up a kubectl port-forward from the mcp-agents service in the mcp-agents name
 {
   "id": "episode-abc123",
   "agent_id": "autonomous-agent",
-  "timestamp": "2026-02-07T10:30:00Z",
+  "timestamp": "2026-03-19T15:30:00Z",
   "state": {
     "query": "Analyze customer churn for Q4 2025",
     "context": { "user": "analyst@contoso.com" }
@@ -313,7 +313,7 @@ Step 1: Checking training run status...
 Step 2: Promoting fine-tuned model...
   Deployment ID: 16b85e61-82e6-4cae-9df7-14c4e449b030
   Is Active: True
-  Promoted At: 2026-02-16T00:06:22.464282
+  Promoted At: 2026-03-19T16:06:22.464282
 
 ============================================================
 Step 3: Updating AKS deployment 'mcp-agents'...
@@ -356,7 +356,7 @@ Fill in the table below with your actual scores. Expected improvement ranges are
 Copilot Prompt:
 
 ```
-Run an automated comparison of episode quality before and after fine-tuning using: python -m src.lightning.cli compare-versions --agent-id autonomous-agent --before-date 2026-02-07T00:00:00Z --after-date 2026-02-07T12:00:00Z. Display the comparison table with intent resolution, tool accuracy, and task adherence metrics.
+Run an automated comparison of episode quality before and after fine-tuning using: python -m src.lightning.cli compare-versions --agent-id autonomous-agent --before-date 2026-03-19T14:00:00Z --after-date 2026-03-19T18:00:00Z. Display the comparison table with intent resolution, tool accuracy, and task adherence metrics.
 ```
 
 ### Example Comparison Output
