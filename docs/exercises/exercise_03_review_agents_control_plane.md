@@ -127,7 +127,7 @@ az search service update -g apim-mcp-aks -n $(az resource list --resource-type M
 
 ---
 
-## Step 3.4: Check Fabric IQ (Facts/Ontology)
+## Step 3.4: Check Facts/Ontology
 
 Ontologies provide grounded facts for agent reasoning. In agentic systems, an ontology is a structured representation of domain knowledge—defining entity types, relationships, and facts—that the agent uses to anchor its reasoning in verified, real-world data rather than relying solely on the LLM's parametric knowledge. This grounding is critical because it prevents hallucination, ensures consistency across agent sessions, and enables the agent to reason over domain-specific concepts (e.g., "Customer has churn risk 0.85") that the base model was never trained on.
 
@@ -215,9 +215,22 @@ az role assignment list --assignee <managed-identity-client-id> --all --output t
 kubectl get serviceaccount mcp-agent-sa -n mcp-agents -o yaml
 ```
 
-#### Expected annotation:
-azure.workload.identity/client-id: <managed-identity-client-id>
-```
+Expected output:
+
+> | Field | Value |
+> |-------|-------|
+> | **Name** | `mcp-agent-sa` |
+> | **Namespace** | `mcp-agents` |
+> | **Managed Identity Client ID** | `000a4749-749d-4088-a8ba-6eb06e9211fd` |
+> | **Tenant ID** | `ac13813e-46f5-48f7-a829-34d31dc94495` |
+> | **Workload Identity Enabled** | `true` (`azure.workload.identity/use: "true"`) |
+> | **Identity Type Label** | `entra-agent-identity` |
+> 
+> The workload identity federation is properly configured — the service account has both the
+> `azure.workload.identity/client-id` and `azure.workload.identity/tenant-id` annotations,
+> and the `azure.workload.identity/use: "true"` label is set. This allows pods using this 
+> service account to authenticate to Azure services (Cosmos DB, AI Foundry, AI Search, 
+> Storage) > via Entra ID without storing any secrets.
 
 ---
 
