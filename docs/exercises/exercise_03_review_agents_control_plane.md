@@ -59,7 +59,7 @@ Azure AI Search provides vector search for long-term memory retrieval. In this a
 ### Navigate to the Knowledge Base
 
 1. Open Azure Portal
-2. Navigate to **Azure AI Search** → Your service → **Knowledge bases**
+2. Navigate to **Azure AI Search** → Your service → **Agentic retrieval** → **Knowledge bases**
 3. Open the **task-instructions-kb** knowledge base
 
 ### Query the Knowledge Base
