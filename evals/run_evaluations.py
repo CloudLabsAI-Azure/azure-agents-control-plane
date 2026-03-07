@@ -56,6 +56,7 @@ import logging
 import os
 import re
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -368,6 +369,32 @@ async def run_batch_evaluation(
     return {"error": "No content in response"}
 
 
+def _restart_port_forward(namespace: str = "mcp-agents", svc: str = "mcp-agents", local_port: int = 8000, remote_port: int = 80):
+    """Kill any existing port-forward on local_port and start a new one."""
+    import subprocess as _sp
+    import platform
+    # Kill existing processes on the port
+    if platform.system() == "Windows":
+        _sp.run(
+            ["powershell", "-Command",
+             f"Get-NetTCPConnection -LocalPort {local_port} -ErrorAction SilentlyContinue | "
+             f"Select-Object -ExpandProperty OwningProcess -Unique | "
+             f"ForEach-Object {{ Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue }}"],
+            capture_output=True, timeout=10
+        )
+    else:
+        _sp.run(["bash", "-c", f"lsof -ti:{local_port} | xargs -r kill -9"], capture_output=True, timeout=10)
+    time.sleep(2)
+    # Start new port-forward in background
+    proc = _sp.Popen(
+        ["kubectl", "port-forward", f"svc/{svc}", "-n", namespace, f"{local_port}:{remote_port}"],
+        stdout=_sp.DEVNULL, stderr=_sp.DEVNULL
+    )
+    time.sleep(4)  # give it time to establish
+    logger.info(f"Restarted port-forward on {local_port} (pid={proc.pid})")
+    return proc
+
+
 async def run_sequential_evaluation(
     base_url: str,
     token: str,
@@ -393,26 +420,50 @@ async def run_sequential_evaluation(
 
         # Wait between items to avoid rate limits and let the pod recover
         if i > 1:
-            wait_secs = 15
+            wait_secs = 10
             print(f"   Waiting {wait_secs}s between evaluations (rate-limit cooldown)...")
             await asyncio.sleep(wait_secs)
 
-        # Fresh SSE session for each item
-        async with MCPClient(base_url, token) as client:
-            if not await client.establish_sse_session():
-                per_item_results.append({"error": "SSE session failed", "query": item.get("query", "")})
-                continue
-            await asyncio.sleep(1)
+        # Retry logic: attempt up to 3 times with increasing waits
+        max_retries = 3
+        result = None
+        for attempt in range(1, max_retries + 1):
+            # Fresh SSE session for each item
+            try:
+                async with MCPClient(base_url, token) as client:
+                    if not await client.establish_sse_session():
+                        if attempt < max_retries:
+                            retry_wait = 15 * attempt
+                            print(f"   SSE session failed (attempt {attempt}/{max_retries}), restarting port-forward and retrying in {retry_wait}s...")
+                            _restart_port_forward()
+                            await asyncio.sleep(retry_wait)
+                            continue
+                        per_item_results.append({"error": "SSE session failed", "query": item.get("query", "")})
+                        break
+                    await asyncio.sleep(1)
 
-            result = await run_single_evaluation(
-                client=client,
-                query=item.get("query", ""),
-                response=item.get("response", ""),
-                tool_calls=item.get("tool_calls"),
-                system_message=item.get("system_message"),
-                context=item.get("context"),
-                thresholds=thresholds,
-            )
+                    result = await run_single_evaluation(
+                        client=client,
+                        query=item.get("query", ""),
+                        response=item.get("response", ""),
+                        tool_calls=item.get("tool_calls"),
+                        system_message=item.get("system_message"),
+                        context=item.get("context"),
+                        thresholds=thresholds,
+                    )
+                    break  # success
+            except Exception as e:
+                if attempt < max_retries:
+                    retry_wait = 15 * attempt
+                    print(f"   Error on attempt {attempt}/{max_retries}: {e}")
+                    print(f"   Restarting port-forward, retrying in {retry_wait}s...")
+                    _restart_port_forward()
+                    await asyncio.sleep(retry_wait)
+                else:
+                    result = {"error": str(e), "query": item.get("query", "")}
+
+        if result is None:
+            continue
 
         if "error" in result:
             print(f"   [FAIL] {result['error']}")
