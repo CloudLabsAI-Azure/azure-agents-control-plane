@@ -63,7 +63,7 @@ This project follows the [SpecKit Methodology](https://speckit.dev) for agent go
 - [pip](https://pip.pypa.io/en/stable/installation/)
 - [uv](https://docs.astral.sh/uv/getting-started/installation/)
 - [VS Code](https://code.visualstudio.com/download)
-- [GitHub Copilot](https://github.com/features/copilot) with premium coding models (GPT-5.2-Codex, Claude 4.5 Opus, Sonnet)
+- [GitHub Copilot](https://github.com/features/copilot) with premium coding models (GPT-5.3-Codex, Claude 4.6 Opus, Sonnet)
 
 #### Azure & Container Tools
 
