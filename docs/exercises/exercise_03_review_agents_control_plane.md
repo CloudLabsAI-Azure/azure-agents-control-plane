@@ -184,8 +184,8 @@ The agent's managed identity client ID is stored as an annotation on the Kuberne
 
 Retrieve the managed identity client ID from the service account:
 
-```powershell
-# Get the managed identity client ID from the service account annotation
+#### Get the managed identity client ID from the service account annotation
+```
 kubectl get serviceaccount mcp-agent-sa -n mcp-agents -o jsonpath='{.metadata.annotations.azure\.workload\.identity/client-id}'
 ```
 
@@ -193,8 +193,8 @@ Save the output — you will use it in the commands below.
 
 ### Review Role Assignments
 
-```powershell
-# List role assignments for agent identity (replace with your client ID from above)
+#### List role assignments for agent identity (replace with your client ID from above)
+```
 az role assignment list --assignee <managed-identity-client-id> --all --output table
 ```
 
@@ -209,12 +209,14 @@ az role assignment list --assignee <managed-identity-client-id> --all --output t
 
 ### Verify Workload Identity
 
-```powershell
-# Check service account annotation
-kubectl get serviceaccount mcp-agent-sa -n mcp-agents -o yaml
+#### Check service account annotation
 
-# Expected annotation:
-# azure.workload.identity/client-id: <managed-identity-client-id>
+```
+kubectl get serviceaccount mcp-agent-sa -n mcp-agents -o yaml
+```
+
+#### Expected annotation:
+azure.workload.identity/client-id: <managed-identity-client-id>
 ```
 
 ---
