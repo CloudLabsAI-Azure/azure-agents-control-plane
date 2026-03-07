@@ -24,36 +24,34 @@ Without before/after evaluation, you cannot distinguish a model that improved fr
 
 ## Agent Lightning + Evaluation Loop
 
-```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                  FINE-TUNING & EVALUATION CLOSED LOOP                    │
-├──────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│  1. BASELINE EVAL                 2. CAPTURE EPISODES                    │
-│  ┌─────────────────────┐          ┌─────────────────────┐                │
-│  │ Run evals on base   │          │ User asks question  │                │
-│  │ model: intent,      │ ───────► │ Agent responds      │                │
-│  │ tool, task scores   │          │ Episode stored      │                │
-│  │ Record baseline     │          │ in Cosmos DB        │                │
-│  └─────────────────────┘          └──────────┬──────────┘                │
-│                                              │                           │
-│  6. POST-TRAINING EVAL            3. LABEL   ▼   4. BUILD & TRAIN        │
-│  ┌─────────────────────┐          ┌─────────────────────┐                │
-│  │ Re-run SAME evals   │ ◄─────── │ Reward episodes     │                │
-│  │ Compare to baseline │   Deploy │ Build JSONL dataset │                │
-│  │ Gate: must improve! │   tuned  │ Fine-tune on Azure  │                │
-│  └─────────────────────┘   model  │ OpenAI              │                │
-│         │                         └─────────────────────┘                │
-│         ▼                                                                │
-│  ┌──────────────────────┐                                                │
-│  │ 7. DECISION GATE     │                                                │
-│  │ Improved? → Keep     │                                                │
-│  │ Regressed? → Rollback│                                                │
-│  │ Flat? → More data    │                                                │
-│  └──────────────────────┘                                                │
-│                                                                          │
-└──────────────────────────────────────────────────────────────────────────┘
-```
+> ┌──────────────────────────────────────────────────────────────────────────┐
+> │                  FINE-TUNING & EVALUATION CLOSED LOOP                    │
+> ├──────────────────────────────────────────────────────────────────────────┤
+> │                                                                          │
+> │  1. BASELINE EVAL                 2. CAPTURE EPISODES                    │
+> │  ┌─────────────────────┐          ┌─────────────────────┐                │
+> │  │ Run evals on base   │          │ User asks question  │                │
+> │  │ model: intent,      │ ───────► │ Agent responds      │                │
+> │  │ tool, task scores   │          │ Episode stored      │                │
+> │  │ Record baseline     │          │ in Cosmos DB        │                │
+> │  └─────────────────────┘          └──────────┬──────────┘                │
+> │                                              │                           │
+> │  6. POST-TRAINING EVAL            3. LABEL   ▼   4. BUILD & TRAIN        │
+> │  ┌─────────────────────┐          ┌─────────────────────┐                │
+> │  │ Re-run SAME evals   │ ◄─────── │ Reward episodes     │                │
+> │  │ Compare to baseline │   Deploy │ Build JSONL dataset │                │
+> │  │ Gate: must improve! │   tuned  │ Fine-tune on Azure  │                │
+> │  └─────────────────────┘   model  │ OpenAI              │                │
+> │         │                         └─────────────────────┘                │
+> │         ▼                                                                │
+> │  ┌──────────────────────┐                                                │
+> │  │ 7. DECISION GATE     │                                                │
+> │  │ Improved? → Keep     │                                                │
+> │  │ Regressed? → Rollback│                                                │
+> │  │ Flat? → More data    │                                                │
+> │  └──────────────────────┘                                                │
+> │                                                                          │
+> └──────────────────────────────────────────────────────────────────────────┘
 
 ---
 
@@ -153,25 +151,25 @@ Set up a kubectl port-forward from the mcp-agents service in the mcp-agents name
 
 ### Episode Structure
 
-{
-  "id": "episode-abc123",
-  "agent_id": "autonomous-agent",
-  "timestamp": "2026-02-07T10:30:00Z",
-  "state": {
-    "query": "Analyze customer churn for Q4 2025",
-    "context": { "user": "analyst@contoso.com" }
-  },
-  "action": {
-    "tool": "analyze_churn",
-    "arguments": { "period": "Q4 2025" }
-  },
-  "result": {
-    "churn_rate": 0.12,
-    "at_risk_customers": 450
-  },
-  "reward": null,
-  "labeled": false
-}
+> {
+>   "id": "episode-abc123",
+>   "agent_id": "autonomous-agent",
+>   "timestamp": "2026-02-07T10:30:00Z",
+>   "state": {
+>     "query": "Analyze customer churn for Q4 2025",
+>     "context": { "user": "analyst@contoso.com" }
+>   },
+>   "action": {
+>     "tool": "analyze_churn",
+>     "arguments": { "period": "Q4 2025" }
+>   },
+>   "result": {
+>     "churn_rate": 0.12,
+>     "at_risk_customers": 450
+>   },
+>   "reward": null,
+>   "labeled": false
+> }
 
 ---
 

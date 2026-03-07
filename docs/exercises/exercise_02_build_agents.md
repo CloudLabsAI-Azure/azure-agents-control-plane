@@ -88,8 +88,8 @@ To develop your specification, have three options.
 1) If you want to start from scratch then follow these instructions.
 Be sure to edit the following with the actual use case information:
 
-- <responsibility_of_your_agent>
-- <do x,y,z>
+- `<responsibility_of_your_agent>`
+- `<do x,y,z>`
 
 Copilot Prompt:
 
@@ -108,8 +108,8 @@ The specification should include:
 2) If you want to alter an existing specification then follow these instructions.
 Be sure to edit the following with the actual use case information:
 
-- <use_case_file_root>
-- <x,y,z>
+- `<use_case_file_root>`
+- `<x,y,z>`
 
 Copilot Prompt:
 
