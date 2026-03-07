@@ -24,34 +24,36 @@ Without before/after evaluation, you cannot distinguish a model that improved fr
 
 ## Agent Lightning + Evaluation Loop
 
-> ┌──────────────────────────────────────────────────────────────────────────┐
-> │                  FINE-TUNING & EVALUATION CLOSED LOOP                    │
-> ├──────────────────────────────────────────────────────────────────────────┤
-> │                                                                          │
-> │  1. BASELINE EVAL                 2. CAPTURE EPISODES                    │
-> │  ┌─────────────────────┐          ┌─────────────────────┐                │
-> │  │ Run evals on base   │          │ User asks question  │                │
-> │  │ model: intent,      │ ───────► │ Agent responds      │                │
-> │  │ tool, task scores   │          │ Episode stored      │                │
-> │  │ Record baseline     │          │ in Cosmos DB        │                │
-> │  └─────────────────────┘          └──────────┬──────────┘                │
-> │                                              │                           │
-> │  6. POST-TRAINING EVAL            3. LABEL   ▼   4. BUILD & TRAIN        │
-> │  ┌─────────────────────┐          ┌─────────────────────┐                │
-> │  │ Re-run SAME evals   │ ◄─────── │ Reward episodes     │                │
-> │  │ Compare to baseline │   Deploy │ Build JSONL dataset │                │
-> │  │ Gate: must improve! │   tuned  │ Fine-tune on Azure  │                │
-> │  └─────────────────────┘   model  │ OpenAI              │                │
-> │         │                         └─────────────────────┘                │
-> │         ▼                                                                │
-> │  ┌──────────────────────┐                                                │
-> │  │ 7. DECISION GATE     │                                                │
-> │  │ Improved? → Keep     │                                                │
-> │  │ Regressed? → Rollback│                                                │
-> │  │ Flat? → More data    │                                                │
-> │  └──────────────────────┘                                                │
-> │                                                                          │
-> └──────────────────────────────────────────────────────────────────────────┘
+<pre>
+┌──────────────────────────────────────────────────────────────────────────┐
+│                  FINE-TUNING & EVALUATION CLOSED LOOP                    │
+├──────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  1. BASELINE EVAL                 2. CAPTURE EPISODES                    │
+│  ┌─────────────────────┐          ┌─────────────────────┐                │
+│  │ Run evals on base   │          │ User asks question  │                │
+│  │ model: intent,      │ ───────► │ Agent responds      │                │
+│  │ tool, task scores   │          │ Episode stored      │                │
+│  │ Record baseline     │          │ in Cosmos DB        │                │
+│  └─────────────────────┘          └──────────┬──────────┘                │
+│                                              │                           │
+│  6. POST-TRAINING EVAL            3. LABEL   ▼   4. BUILD & TRAIN        │
+│  ┌─────────────────────┐          ┌─────────────────────┐                │
+│  │ Re-run SAME evals   │ ◄─────── │ Reward episodes     │                │
+│  │ Compare to baseline │   Deploy │ Build JSONL dataset │                │
+│  │ Gate: must improve! │   tuned  │ Fine-tune on Azure  │                │
+│  └─────────────────────┘   model  │ OpenAI              │                │
+│         │                         └─────────────────────┘                │
+│         ▼                                                                │
+│  ┌──────────────────────┐                                                │
+│  │ 7. DECISION GATE     │                                                │
+│  │ Improved? → Keep     │                                                │
+│  │ Regressed? → Rollback│                                                │
+│  │ Flat? → More data    │                                                │
+│  └──────────────────────┘                                                │
+│                                                                          │
+└──────────────────────────────────────────────────────────────────────────┘
+</pre>
 
 ---
 
@@ -64,7 +66,7 @@ Before any fine-tuning, create a consistent evaluation dataset that will be used
 Copilot Prompt:
 
 ```
-Generate an evaluation dataset for my autonomous agent. Review the SpecKit specification file at .speckit/specifications/ that corresponds to my agents use case. Also review the domain-specific task instruction documents in task_instructions/ and the ontology fact files in facts/ontology/ to understand the agents domain, intents, tools, and expected behaviors. Additionally, review the existing evaluation data in evals/next_best_action_eval_data.jsonl as a reference for the expected JSONL format and structure. Using all of this context, generate a JSONL evaluation file at evals/autonomous_agent_eval.jsonl. Each line should be a JSON object with: query, expected_intent (derived from the specs workflow intents), expected_tools (derived from the spec's MCP Tool Catalog), expected_response_contains (keywords from the task instructions and ontology), and context (user roles from the specs security requirements). Generate at least 8 diverse test cases covering the full range of intents, tools, and edge cases defined in the specification.
+Generate an evaluation dataset for my autonomous agent. Review the SpecKit specification file at .speckit/specifications/ that corresponds to my agents use case. Also review the domain-specific task instruction documents in task_instructions/ and the ontology fact files in facts/ontology/ to understand the agents domain, intents, tools, and expected behaviors. Additionally, review the existing evaluation data in evals/next_best_action_eval_data.jsonl as a reference for the expected JSONL format and structure. Using all of this context, generate a JSONL evaluation file at evals/autonomous_agent_eval.jsonl. Each line should be a JSON object with: query, expected_intent (derived from the specs workflow intents), expected_tools (derived from the spec's MCP Tool Catalog), expected_response_contains (keywords from the task instructions and ontology), and context (user roles from the specs security requirements). Generate at least 12 diverse test cases covering the full range of intents, tools, and edge cases defined in the specification — 10 primary test cases for evaluation and 2 additional validation cases that test boundary conditions or uncommon intents to ensure the evaluation is robust.
 ```
 
 ### What Copilot Will Do
@@ -81,7 +83,7 @@ Copilot will:
 Copilot Prompt:
 
 ```
-Read the generated evals/autonomous_agent_eval.jsonl and verify that: (1) each line is valid JSON, (2) the expected_intent values match intents from the specification, (3) the expected_tools reference tools from the specs MCP Tool Catalog, and (4) there are at least 8 test cases covering different intents. Report a summary.
+Read the generated evals/autonomous_agent_eval.jsonl and verify that: (1) each line is valid JSON, (2) the expected_intent values match intents from the specification, (3) the expected_tools reference tools from the specs MCP Tool Catalog, and (4) there are at least 12 test cases — 10 primary evaluation cases and 2 validation cases covering different intents. Report a summary.
 ```
 
 > **Important:** Use the **same evaluation dataset** for both baseline and post-training evaluation. This is the only way to produce a valid comparison.
@@ -151,25 +153,27 @@ Set up a kubectl port-forward from the mcp-agents service in the mcp-agents name
 
 ### Episode Structure
 
-> {
->   "id": "episode-abc123",
->   "agent_id": "autonomous-agent",
->   "timestamp": "2026-02-07T10:30:00Z",
->   "state": {
->     "query": "Analyze customer churn for Q4 2025",
->     "context": { "user": "analyst@contoso.com" }
->   },
->   "action": {
->     "tool": "analyze_churn",
->     "arguments": { "period": "Q4 2025" }
->   },
->   "result": {
->     "churn_rate": 0.12,
->     "at_risk_customers": 450
->   },
->   "reward": null,
->   "labeled": false
-> }
+<pre>
+{
+  "id": "episode-abc123",
+  "agent_id": "autonomous-agent",
+  "timestamp": "2026-02-07T10:30:00Z",
+  "state": {
+    "query": "Analyze customer churn for Q4 2025",
+    "context": { "user": "analyst@contoso.com" }
+  },
+  "action": {
+    "tool": "analyze_churn",
+    "arguments": { "period": "Q4 2025" }
+  },
+  "result": {
+    "churn_rate": 0.12,
+    "at_risk_customers": 450
+  },
+  "reward": null,
+  "labeled": false
+}
+</pre>
 
 ---
 
@@ -213,8 +217,10 @@ Build a fine-tuning dataset from labeled episodes for the autonomous-agent. Run:
 
 This creates a JSONL file in the format expected by Azure OpenAI
 
-> `{"messages": [{"role": "system", "content": "You are an analytics agent..."}, {"role": "user", "content": "Analyze customer churn for Q4 2025"}, {"role": "assistant", "content": "..."}]}`
-> `{"messages": [{"role": "system", "content": "..."}, {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]}`
+<pre>
+{"messages": [{"role": "system", "content": "You are an analytics agent..."}, {"role": "user", "content": "Analyze customer churn for Q4 2025"}, {"role": "assistant", "content": "..."}]}
+{"messages": [{"role": "system", "content": "..."}, {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]}
+</pre>
 
 ### Expected Dataset Statistics
 
@@ -222,12 +228,14 @@ Copilot will display the dataset info.
 
 Expected output:
 
-> Dataset: autonomous-agent-v1
-> Episodes: 150
-> Avg Reward: 0.82
-> Min Reward: 0.70
-> Max Reward: 0.98
-> Token Count: 45,230
+<pre>
+Dataset: autonomous-agent-v1
+Episodes: 150
+Avg Reward: 0.82
+Min Reward: 0.70
+Max Reward: 0.98
+Token Count: 45,230
+</pre>
 
 ---
 
@@ -253,17 +261,19 @@ Ensure kubectl port-forward is active on port 8000 to mcp-agents. Then activate 
 
 Expected output:
 
-> Monitoring training run: b0a935c0-f6d4-4e97-855e-a9b50dde2c8c
-> MCP endpoint: http://localhost:8000/runtime/webhooks/mcp
-> Poll interval: 30s | Timeout: 120m
-> \------------------------------------------------------------
-> [13:15:23] Status: running | AOAI: ftjob-50b46088abde49e5869181f7a47b782b
-> [13:15:53] Status: running | AOAI: ftjob-50b46088abde49e5869181f7a47b782b
-> ...
-> [13:52:38] Status: succeeded | AOAI: ftjob-50b46088abde49e5869181f7a47b782b | Metrics: training_loss=0.066 | trained_tokens=11367
-> \------------------------------------------------------------
-> Training SUCCEEDED!
-> Fine-tuned model: gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
+<pre>
+Monitoring training run: b0a935c0-f6d4-4e97-855e-a9b50dde2c8c
+MCP endpoint: http://localhost:8000/runtime/webhooks/mcp
+Poll interval: 30s | Timeout: 120m
+------------------------------------------------------------
+[13:15:23] Status: running | AOAI: ftjob-50b46088abde49e5869181f7a47b782b
+[13:15:53] Status: running | AOAI: ftjob-50b46088abde49e5869181f7a47b782b
+...
+[13:52:38] Status: succeeded | AOAI: ftjob-50b46088abde49e5869181f7a47b782b | Metrics: training_loss=0.066 | trained_tokens=11367
+------------------------------------------------------------
+Training SUCCEEDED!
+Fine-tuned model: gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
+</pre>
 
 > **Important**: The `lightning_get_training_status` MCP tool polls the Azure OpenAI API on each call, syncing the real-time status back to Cosmos DB. This ensures the Cosmos record stays current with the actual AOAI job status.
 
@@ -292,30 +302,32 @@ Ensure kubectl port-forward is active on port 8000 to mcp-agents. Then activate 
 
 Expected output:
 
-> ============================================================
-> Step 1: Checking training run status...
-> &nbsp;&nbsp;Status: succeeded
-> &nbsp;&nbsp;Model: gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
-> &nbsp;&nbsp;Metrics: {"training_loss": 0.066, "trained_tokens": 11367}
->
-> ============================================================
-> Step 2: Promoting fine-tuned model...
-> &nbsp;&nbsp;Deployment ID: 16b85e61-82e6-4cae-9df7-14c4e449b030
-> &nbsp;&nbsp;Is Active: True
-> &nbsp;&nbsp;Promoted At: 2026-02-16T00:06:22.464282
->
-> ============================================================
-> Step 3: Updating AKS deployment 'mcp-agents'...
-> &nbsp;&nbsp;Set USE_TUNED_MODEL=true
-> &nbsp;&nbsp;Set TUNED_MODEL_NAME=gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
-> &nbsp;&nbsp;Waiting for rollout...
-> &nbsp;&nbsp;Rollout complete!
-> &nbsp;&nbsp;Verified env vars:
-> &nbsp;&nbsp;&nbsp;&nbsp;USE_TUNED_MODEL=true
-> &nbsp;&nbsp;&nbsp;&nbsp;TUNED_MODEL_NAME=gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
->
-> ============================================================
-> Deployment complete!
+<pre>
+============================================================
+Step 1: Checking training run status...
+  Status: succeeded
+  Model: gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
+  Metrics: {"training_loss": 0.066, "trained_tokens": 11367}
+
+============================================================
+Step 2: Promoting fine-tuned model...
+  Deployment ID: 16b85e61-82e6-4cae-9df7-14c4e449b030
+  Is Active: True
+  Promoted At: 2026-02-16T00:06:22.464282
+
+============================================================
+Step 3: Updating AKS deployment 'mcp-agents'...
+  Set USE_TUNED_MODEL=true
+  Set TUNED_MODEL_NAME=gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
+  Waiting for rollout...
+  Rollout complete!
+  Verified env vars:
+    USE_TUNED_MODEL=true
+    TUNED_MODEL_NAME=gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
+
+============================================================
+Deployment complete!
+</pre>
 
 ---
 
