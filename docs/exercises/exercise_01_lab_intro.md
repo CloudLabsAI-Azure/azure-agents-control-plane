@@ -227,12 +227,13 @@ Activate the .venv virtual environment and run tests/test_next_best_action_funct
 Copilot will activate the virtual environment, navigate to the tests directory, and execute the connection test.
 
 **Expected Output:**
-
+<pre style="background-color: #f0f0f0; padding: 12px; border-radius: 6px;">
 All tests passed. Here's the summary:
 
 - AKS: Already running (2 pods in mcp-agents namespace)
 - Port-forward: Already active on port 8000
 - Test results: All 3 next_best_action tests + semantic similarity test PASSED
+</pre>
 
 ### Troubleshooting
 
