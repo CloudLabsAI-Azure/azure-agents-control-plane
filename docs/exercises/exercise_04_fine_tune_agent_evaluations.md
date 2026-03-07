@@ -24,7 +24,7 @@ Without before/after evaluation, you cannot distinguish a model that improved fr
 
 ## Agent Lightning + Evaluation Loop
 
-```
+<pre style="background-color: #f0f0f0; color: #000; padding: 12px; border-radius: 6px;">
 ┌──────────────────────────────────────────────────────────────────────────┐
 │                  FINE-TUNING & EVALUATION CLOSED LOOP                    │
 ├──────────────────────────────────────────────────────────────────────────┤
@@ -53,7 +53,7 @@ Without before/after evaluation, you cannot distinguish a model that improved fr
 │  └──────────────────────┘                                                │
 │                                                                          │
 └──────────────────────────────────────────────────────────────────────────┘
-```
+</pre>
 
 ---
 
