@@ -213,12 +213,13 @@ Copilot Prompt:
 Build a fine-tuning dataset from labeled episodes for the autonomous-agent. Run: python -m src.lightning.cli build-dataset --agent-id autonomous-agent --name autonomous-agent-v1 --min-reward 0.7 --output-format jsonl. This will create a JSONL file in the Azure OpenAI fine-tuning format. After building, run python -m src.lightning.cli dataset-info --name autonomous-agent-v1 to display the dataset statistics including episode count, average reward, and token count.
 ```
 
-This creates a JSONL file in the format expected by Azure OpenAI:
+This creates a JSONL file in the format expected by Azure OpenAI
 
-```json
+<pre>
+json
 {"messages": [{"role": "system", "content": "You are an analytics agent..."}, {"role": "user", "content": "Analyze customer churn for Q4 2025"}, {"role": "assistant", "content": "..."}]}
 {"messages": [{"role": "system", "content": "..."}, {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]}
-```
+</pre>
 
 ### Expected Dataset Statistics
 
@@ -255,7 +256,7 @@ Ensure kubectl port-forward is active on port 8000 to mcp-agents. Then activate 
 
 Expected output during training:
 
-```
+<pre>
 Monitoring training run: b0a935c0-f6d4-4e97-855e-a9b50dde2c8c
 MCP endpoint: http://localhost:8000/runtime/webhooks/mcp
 Poll interval: 30s | Timeout: 120m
@@ -267,10 +268,15 @@ Poll interval: 30s | Timeout: 120m
 ------------------------------------------------------------
 Training SUCCEEDED!
 Fine-tuned model: gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
+</pre>
 
-Next step: Deploy the model with:
+
+Copilot Prompt:
+
+```
+Deploy the model with:
   python scripts/deploy_finetuned_model.py \
-    --training-run-id b0a935c0-f6d4-4e97-855e-a9b50dde2c8c \
+    --training-run-id <tbd> \
     --port 8000
 ```
 
