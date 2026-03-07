@@ -459,14 +459,14 @@ You have completed the fine-tuning and evaluation exercise:
 ## Completion Checklist
 
 - [ ] Evaluation dataset created with test cases
-- [ ] **Baseline evaluation** run on base model (scores recorded)
+- [ ] Baseline evaluation run on base model (scores recorded)
 - [ ] Episode capture enabled for agents
 - [ ] Episodes generated through test interactions
 - [ ] Episodes reviewed and labeled with rewards
 - [ ] Fine-tuning dataset created with min reward threshold
 - [ ] Fine-tuning job submitted and completed successfully
 - [ ] Fine-tuned model deployed to agent
-- [ ] **Post-training evaluation** re-run on same dataset
+- [ ] Post-training evaluation re-run on same dataset
 - [ ] Before/after scores compared — improvement validated
 - [ ] Decision gate applied (keep, rollback, or retrain)
 - [ ] Evaluation results stored for historical tracking
