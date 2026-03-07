@@ -215,7 +215,7 @@ Build a fine-tuning dataset from labeled episodes for the autonomous-agent. Run:
 
 This creates a JSONL file in the format expected by Azure OpenAI
 
-<pre style="background-color: #f0f0f0; padding: 12px; border-radius: 6px;">
+<pre style="background-color: #f0f0f0; color: #000; padding: 12px; border-radius: 6px;">
 json
 {"messages": [{"role": "system", "content": "You are an analytics agent..."}, {"role": "user", "content": "Analyze customer churn for Q4 2025"}, {"role": "assistant", "content": "..."}]}
 {"messages": [{"role": "system", "content": "..."}, {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]}
@@ -226,8 +226,7 @@ json
 Copilot will display the dataset info.
 
 Expected output:
-
-<pre style="background-color: #f0f0f0; padding: 12px; border-radius: 6px;">
+<pre style="background-color: #f0f0f0; color: #000; padding: 12px; border-radius: 6px;">
 Dataset: autonomous-agent-v1
 Episodes: 150
 Avg Reward: 0.82
@@ -258,8 +257,7 @@ Ensure kubectl port-forward is active on port 8000 to mcp-agents. Then activate 
 ```
 
 Expected output:
-
-<pre style="background-color: #f0f0f0; padding: 12px; border-radius: 6px;">
+<pre style="background-color: #f0f0f0; color: #000; padding: 12px; border-radius: 6px;">
 Monitoring training run: b0a935c0-f6d4-4e97-855e-a9b50dde2c8c
 MCP endpoint: http://localhost:8000/runtime/webhooks/mcp
 Poll interval: 30s | Timeout: 120m
@@ -309,8 +307,7 @@ Ensure kubectl port-forward is active on port 8000 to mcp-agents. Then activate 
 ```
 
 Expected output:
-
-<pre style="background-color: #f0f0f0; padding: 12px; border-radius: 6px;">
+<pre style="background-color: #f0f0f0; color: #000; padding: 12px; border-radius: 6px;">
 ============================================================
 Step 1: Checking training run status...
   Status: succeeded
