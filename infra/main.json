@@ -9888,7 +9888,7 @@
               "name": "Containers",
               "properties": {
                 "pricingTier": "Standard",
-                "subPlan": "P2",
+                "subPlan": "free",
                 "extensions": [
                   {
                     "name": "ContainerRegistriesVulnerabilityAssessments",
