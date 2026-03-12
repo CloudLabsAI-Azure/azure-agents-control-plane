@@ -82,6 +82,10 @@ The control plane is composed of Azure services that each fulfill a distinct rol
 
 Throughout this lab you will use **GitHub Copilot in Agent Mode** to generate code, run terminal commands, and iterate on your agent implementation — all from within VS Code. The following walkthrough shows the GitHub Copilot in Agent Mode Approvals interactions.
 
+**Step 0 — Open Folder**
+
+Open VS Code. Press `Ctrl+K Ctrl+O` (or go to **File → Open Folder…**). In the dialog, type `C:\LabFiles` in the path bar, then click **Select Folder**. VS Code will reload with the lab repository as your workspace root. If prompted to trust the folder, click **Yes, I trust the authors**.
+
 **Step 1 — Open Copilot Chat and Select Agent Mode**
 
 Open the Copilot Chat panel (`Ctrl+Alt+I`) and select **Agent** from the mode dropdown at the top of the chat window. Agent Mode allows Copilot to execute multi-step tasks: it can read files, run terminal commands, edit code, and chain actions together autonomously.
