@@ -620,10 +620,15 @@ class RLLedgerCosmos:
         min_reward: Optional[float] = None,
         sources: Optional[List[RewardSource]] = None,
         limit: int = 100,
+        exclude_tool_prefixes: Optional[List[str]] = None,
     ) -> List[Dict[str, Any]]:
         """
         Query episodes that have rewards, returning both episode and reward data.
         Returns list of {episode: Episode, rewards: List[Reward], avg_reward: float}
+
+        Args:
+            exclude_tool_prefixes: Skip episodes whose *only* tool calls
+                match one of these prefixes (e.g. ["lightning_"]).
         """
         if not self._ensure_initialized():
             return []
@@ -663,6 +668,14 @@ class RLLedgerCosmos:
                 
                 episode = self.get_episode(episode_id, agent_id)
                 if episode:
+                    # Filter out episodes whose tool calls are all meta/admin tools
+                    if exclude_tool_prefixes and episode.tool_calls:
+                        dominated = all(
+                            any(tc.tool_name.startswith(pfx) for pfx in exclude_tool_prefixes)
+                            for tc in episode.tool_calls
+                        )
+                        if dominated:
+                            continue
                     results.append({
                         "episode": episode,
                         "rewards": rewards,

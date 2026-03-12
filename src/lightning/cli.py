@@ -57,12 +57,20 @@ def cmd_build_dataset(args):
     if args.sources:
         sources = [RewardSource(s) for s in args.sources.split(',')]
     
+    # Parse exclude-tools flag
+    exclude_tool_prefixes = None
+    if hasattr(args, 'exclude_tools') and args.exclude_tools:
+        exclude_tool_prefixes = [p.strip() for p in args.exclude_tools.split(',') if p.strip()]
+    elif hasattr(args, 'exclude_tools') and args.exclude_tools == '':
+        exclude_tool_prefixes = []  # explicitly disabled
+
     dataset = builder.build_dataset(
         agent_id=args.agent_id,
         name=args.name,
         description=args.description,
         min_reward=args.min_reward,
         sources=sources,
+        exclude_tool_prefixes=exclude_tool_prefixes,
     )
     
     if dataset:
@@ -540,6 +548,9 @@ def main():
     build_ds.add_argument('--description', help='Dataset description')
     build_ds.add_argument('--min-reward', type=float, default=0.0, help='Minimum avg reward for inclusion')
     build_ds.add_argument('--sources', help='Comma-separated reward sources to filter by')
+    build_ds.add_argument('--exclude-tools', default='lightning_',
+                          help='Comma-separated tool-name prefixes to exclude '
+                               '(default: "lightning_"). Pass "" to include all.')
     build_ds.set_defaults(func=cmd_build_dataset)
     
     # build-golden command

@@ -167,6 +167,11 @@ class DatasetBuilder:
         split_idx = int(len(data) * self.config.train_split)
         return data[:split_idx], data[split_idx:]
 
+    # Default prefixes for meta/admin tools that should be excluded from
+    # fine-tuning datasets.  These are Agent Lightning operational tools,
+    # not domain interactions the model should learn from.
+    DEFAULT_EXCLUDE_TOOL_PREFIXES = ["lightning_"]
+
     def build_dataset(
         self,
         agent_id: str,
@@ -176,6 +181,7 @@ class DatasetBuilder:
         sources: Optional[List[RewardSource]] = None,
         start_date: Optional[str] = None,
         end_date: Optional[str] = None,
+        exclude_tool_prefixes: Optional[List[str]] = None,
     ) -> Optional[Dataset]:
         """
         Build a fine-tuning dataset from rewarded episodes.
@@ -188,13 +194,20 @@ class DatasetBuilder:
             sources: Filter by reward sources
             start_date: Filter episodes after this date
             end_date: Filter episodes before this date
+            exclude_tool_prefixes: Exclude episodes whose only tool calls
+                match these prefixes (default: ["lightning_"]).  Pass an
+                empty list to disable this filter.
         
         Returns:
             Dataset manifest with file paths
         """
         min_reward = min_reward if min_reward is not None else self.config.min_reward_threshold
+        if exclude_tool_prefixes is None:
+            exclude_tool_prefixes = self.DEFAULT_EXCLUDE_TOOL_PREFIXES
         
         logger.info(f"Building dataset '{name}' for agent {agent_id} with min_reward={min_reward}")
+        if exclude_tool_prefixes:
+            logger.info(f"Excluding episodes with only tool prefixes: {exclude_tool_prefixes}")
         
         # Query episodes with rewards
         episode_data = self.ledger.query_episodes_with_rewards(
@@ -202,6 +215,7 @@ class DatasetBuilder:
             min_reward=min_reward,
             sources=sources,
             limit=self.config.max_examples,
+            exclude_tool_prefixes=exclude_tool_prefixes,
         )
         
         if not episode_data:

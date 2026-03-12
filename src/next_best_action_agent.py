@@ -3675,7 +3675,9 @@ async def execute_tool(tool_name: str, arguments: Dict[str, Any]) -> MCPToolResu
         )
     
     # Capture episode for Agent Lightning if enabled
-    if episode_capture_hook and episode_capture_hook.is_enabled():
+    # Skip lightning_* meta-tools — they are administrative operations,
+    # not domain interactions suitable for fine-tuning training data.
+    if episode_capture_hook and episode_capture_hook.is_enabled() and not tool_name.startswith("lightning_"):
         try:
             duration_ms = int((time.time() - start_time) * 1000)
             
