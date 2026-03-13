@@ -112,6 +112,24 @@ What is the REST API user management workflow?
 
 Review the response and note how the knowledge base retrieves relevant task instructions from the **task-instructions-source** knowledge source.
 
+### Troubleshooting: Verify AI Search Configuration (CORS, Auth, Field Searchability)
+
+> **Note:** This section is only needed if you encounter issues with AI Search — for example, Search Explorer returns no results, queries fail with 403 errors, or wildcard searches don't match expected documents. If everything in the previous steps worked correctly, you can skip ahead to [Restore Security – Disable Public Access](#restore-security--disable-public-access).
+
+The accelerator's infrastructure pre-configures these settings correctly. If something isn't working, verify they are in place while public access is still enabled:
+
+| Setting | Expected State | Where to Check |
+|---------|---------------|----------------|
+| **CORS** | `https://portal.azure.com` in allowed origins | AI Search → Settings → CORS |
+| **Local auth (API keys)** | Disabled (`disableLocalAuth: true`) | AI Search → Settings → Keys (keys shown but non-functional) |
+| **Field searchability** | All text fields (`title`, `content`, `description`, `steps`, etc.) marked **Searchable** | AI Search → Indexes → `task-instructions` → Fields |
+
+> **How this works:** CORS origins are configured in the Bicep template ([infra/core/search/search-service.bicep](../../infra/core/search/search-service.bicep) — `corsOptions`). Local auth is disabled at the infrastructure layer (`disableLocalAuth: true`), enforcing Entra ID RBAC-only access. Field searchability is set in [scripts/ingest_task_instructions.py](../../scripts/ingest_task_instructions.py), which uses `SearchableField` for all text fields so that portal Search Explorer, wildcard queries, and full-text search work correctly.
+
+If Search Explorer returns no results, check:
+1. Your user principal has the **Search Index Data Reader** role on the AI Search service (see Step 3.6)
+2. The index was created by the latest version of `ingest_task_instructions.py` (re-run it if needed)
+
 
 ### Restore Security – Disable Public Access
 
@@ -141,7 +159,7 @@ In this accelerator, ontologies are stored as JSON files and uploaded to a stora
 | `cicd_pipeline_ontology.json` | DevOps | Pipeline failure categories, deployment events, cluster health |
 | `user_management_ontology.json` | API Management | User roles, endpoint schemas, access control patterns |
 
-> **Note:** Review the locally generated ontology files under the `facts/ontology/` folder in this repository (e.g. `facts/ontology/<domain>.json`). This step will be fully fleshed out once the Fabric IQ environment is ready.
+> **Note:** Review the locally generated ontology files under the `facts/ontology/` folder in this repository (e.g. `facts/ontology/<domain>.json`).
 
 
 ---
@@ -245,6 +263,9 @@ Based on your review, identify any issues with your agents:
 | APIM Policies | ✅ / ❌ | | |
 | Short Term Memory (CosmosDB Plans/Tasks) | ✅ / ❌ | | |
 | Long Term Memory (FoundryIQ Instructions) | ✅ / ❌ | | |
+| AI Search – CORS Options | ✅ / ❌ | | Portal Search Explorer may fail without CORS |
+| AI Search – Local Auth (API Keys) | ✅ / ❌ | | Should be disabled; RBAC only |
+| AI Search – Field Searchability | ✅ / ❌ | | Wildcard queries fail if fields not searchable |
 | Facts (Fabric IQ Ontologies) | ✅ / ❌ | | |
 | Log Analytics | ✅ / ❌ | | |
 | Entra ID + RBAC | ✅ / ❌ | | |
@@ -257,6 +278,9 @@ Based on your review, identify any issues with your agents:
 | Failed tool calls | Error rate > 5% | Review logs for exceptions |
 | Missing traces | No transactions in App Insights | Verify OpenTelemetry configuration |
 | RBAC errors | 403 responses | Add missing role assignments |
+| CORS not configured on AI Search | Search Explorer returns no results but REST API works | Enable CORS with portal origin (Step 3.3a) |
+| Local auth disabled on AI Search | API key requests return 403 | Use RBAC tokens or temporarily enable local auth (Step 3.3b) |
+| Index fields not searchable | Wildcard/text queries return 0 results | Recreate index with `SearchableField` and re-ingest (Step 3.3c) |
 
 ---
 
@@ -267,6 +291,9 @@ Before proceeding to Exercise 4, please confirm the following:
 - [ ] Reviewed APIM policies and understand security, manageability and governance controls
 - [ ] Verified Cosmos DB is storing plans and tasks
 - [ ] Confirmed FoundryIQ (AI Search) has agentic retrieval of instructions
+- [ ] Checked AI Search CORS options are configured for portal access
+- [ ] Verified AI Search local auth is disabled (RBAC-only)
+- [ ] Confirmed index fields have correct searchable/retrievable attributes
 - [ ] Reviewed ontology files in storage account / Fabric IQ
 - [ ] Queried Log Analytics for agent logs
 - [ ] Verified Entra ID + RBAC role assignments

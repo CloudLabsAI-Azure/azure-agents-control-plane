@@ -34,6 +34,11 @@ param publicNetworkAccess string = 'Enabled'
 @description('Disable local authentication (API keys)')
 param disableLocalAuth bool = true
 
+@description('Allowed CORS origins for portal and client access')
+param corsAllowedOrigins array = [
+  'https://portal.azure.com'
+]
+
 @description('Enable private endpoint')
 param enablePrivateEndpoint bool = false
 
@@ -69,6 +74,11 @@ resource searchService 'Microsoft.Search/searchServices@2024-06-01-preview' = {
       }
     }
     semanticSearch: semanticSearch
+    #disable-next-line BCP037 // corsOptions is valid in the ARM API but missing from Bicep type definitions
+    corsOptions: !empty(corsAllowedOrigins) ? {
+      allowedOrigins: corsAllowedOrigins
+      maxAgeInSeconds: 300
+    } : null
   }
 }
 

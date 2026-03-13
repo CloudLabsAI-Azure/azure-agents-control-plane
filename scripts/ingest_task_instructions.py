@@ -268,11 +268,11 @@ def create_search_index(index_client: SearchIndexClient) -> None:
         SearchableField(name="description", type=SearchFieldDataType.String, analyzer_name="en.microsoft"),
         SearchableField(name="content", type=SearchFieldDataType.String, analyzer_name="en.microsoft"),
         SearchableField(name="keywords", type=SearchFieldDataType.String, collection=True, filterable=True),
-        SimpleField(name="estimated_effort", type=SearchFieldDataType.String, filterable=True),
+        SearchableField(name="estimated_effort", type=SearchFieldDataType.String, filterable=True),
         SimpleField(name="chunk_num", type=SearchFieldDataType.Int32, filterable=True),
         SimpleField(name="total_chunks", type=SearchFieldDataType.Int32),
-        SimpleField(name="steps", type=SearchFieldDataType.String),  # JSON array as string
-        SimpleField(name="related_tasks", type=SearchFieldDataType.String, collection=True),
+        SearchableField(name="steps", type=SearchFieldDataType.String),  # JSON array as string – now searchable
+        SearchableField(name="related_tasks", type=SearchFieldDataType.String, collection=True, filterable=True),
         SimpleField(name="created_at", type=SearchFieldDataType.DateTimeOffset, filterable=True, sortable=True),
         SearchField(
             name="embedding",
