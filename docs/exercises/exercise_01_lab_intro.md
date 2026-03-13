@@ -88,11 +88,19 @@ Open VS Code. Press `Ctrl+K Ctrl+O` (or go to **File → Open Folder…**). In t
 
 **Step 1 — Open Copilot Chat and Select Agent Mode**
 
-Open the Copilot Chat panel (`Ctrl+Alt+I`) and select **Agent** from the mode dropdown at the top of the chat window. Agent Mode allows Copilot to execute multi-step tasks: it can read files, run terminal commands, edit code, and chain actions together autonomously.
+Open the Copilot Chat panel (`Ctrl+Alt+I`) and select **Agent** from the mode dropdown at the top of the chat window. Agent Mode allows Copilot to execute multi-step tasks: it can read files, run terminal commands, edit code, and chain actions together autonomously. Select Opus 4.6 model
 
 **Step 2 — Enter a Prompt and Review the Plan**
 
-Type your prompt in the chat input — for example, *"Check that I have the prerequisites installed."* Copilot will propose a plan of actions (terminal commands, file reads, etc.). You can also set Copilot to auto approve by through the following actions:
+Type your prompt in the chat input:
+
+```
+Check that I have the prerequisites installed: Python 3.11+, Docker, Azure CLI (az and azd), and kubectl. Also verify I'm logged in to Azure.
+```
+
+Copilot will run the version checks and report any missing tools.
+
+Copilot will propose a plan of actions (terminal commands, file reads, etc.). You can also set Copilot to auto approve by through the following actions:
 
 ![Approvals1](media/1.png)
 
@@ -142,17 +150,6 @@ Use **GitHub Copilot in Agent Mode** to complete each validation step below. Ope
 
 ### Auto Approving Agent Actions
 
-
-
-### Prerequisites Check
-
-Copilot Prompt:
-
-```
-Check that I have the prerequisites installed: Python 3.11+, Docker, Azure CLI (az and azd), and kubectl. Also verify I'm logged in to Azure.
-```
-
-Copilot will run the version checks and report any missing tools.
 
 ### AKS Cluster Access
 

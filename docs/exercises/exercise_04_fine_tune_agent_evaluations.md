@@ -122,7 +122,7 @@ Now enable episode capture to collect training data.
 Copilot Prompt:
 
 ```
-Enable episode capture for the autonomous agent and approval agent deployments on AKS. Set the ENABLE_EPISODE_CAPTURE=true environment variable on both the autonomous-agent and approval-agent deployments in the mcp-agents namespace using kubectl set env. Then restart both deployments with kubectl rollout restart and verify they are running with the new environment variable.
+Enable episode capture for the autonomous agent deployments on AKS. Set the ENABLE_EPISODE_CAPTURE=true environment variable on the the autonomous-agent deployments in the mcp-agents namespace using kubectl set env. Then restart both deployments with kubectl rollout restart and verify they are running with the new environment variable.
 ```
 
 ---
