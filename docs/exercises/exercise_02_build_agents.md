@@ -11,14 +11,24 @@ In this exercise, you will use GitHub Copilot and the SpecKit to specify, create
 >
 > Start a **new Copilot chat session** after completing each logical stopping point (e.g. after finishing a Part or a major Step). This keeps the context window focused and prevents earlier conversation history from confusing later prompts. To start a new session, click the **+** button at the top of the Copilot Chat panel.
 >
+
 > ![New Chat Session](media/4.png)
 
 > [TIP]
 > **Copilot May Pause and Ask to Continue**
 >
 > For longer tasks, Copilot may stop partway through and ask if you'd like it to continue. Keep an eye on the chat panel — when you see a prompt asking to proceed, click **Continue** to let Copilot finish its work.
+
 >
 > ![Continue Prompt](media/5.png)
+
+> [TIP]
+> **Steering Copilot When It Gets Off Track**
+>
+> If Copilot takes a while, ask it for current status. If copilot starts heading in the wrong direction — generating code you didn't ask for, misinterpreting the specification, or making assumptions about your domain — you can steer it back on course. First, if Copilot is still processing, ask *"What's your current status?"* or *"What have you done so far?"* to understand where it is before redirecting. Then use short, direct follow-up prompts like *"Stop — that's not what I meant. Let me clarify…"* or *"Undo that last change and instead do X."* You can also highlight specific code in the editor and ask Copilot to focus only on that selection. Steering is a normal part of working with an AI pair programmer — treat it like redirecting a colleague, not a failure.
+>
+> ![Steering Copilot](media/6.png)
+
 
 
 ---
