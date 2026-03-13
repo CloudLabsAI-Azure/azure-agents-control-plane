@@ -212,7 +212,8 @@ Create a training dataset from labeled episodes.
 Copilot Prompt:
 
 ```
-Build a fine-tuning dataset from labeled episodes for the autonomous-agent. Run: python -m src.lightning.cli build-dataset --agent-id autonomous-agent --name autonomous-agent-v1 --min-reward 0.7 --output-format jsonl. This will create a JSONL file in the Azure OpenAI fine-tuning format. After building, run python -m src.lightning.cli dataset-info --name autonomous-agent-v1 to display the dataset statistics including episode count, average reward, and token count.
+Build a fine-tuning dataset from labeled episodes for the autonomous-agent. Ensure that there are at least 10 episodes. 
+Run: python -m src.lightning.cli build-dataset --agent-id autonomous-agent --name autonomous-agent-v1 --min-reward 0.7 --output-format jsonl. This will create a JSONL file in the Azure OpenAI fine-tuning format. After building, run python -m src.lightning.cli dataset-info --name autonomous-agent-v1 to display the dataset statistics including episode count, average reward, and token count.
 ```
 
 This creates a JSONL file in the format expected by Azure OpenAI
