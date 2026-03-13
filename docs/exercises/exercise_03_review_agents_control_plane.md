@@ -81,6 +81,19 @@ Copilot will resolve the search service name and enable public access. Once the 
 2. Navigate to **Azure AI Search** → Your service → **Agentic retrieval** → **Knowledge bases**
 3. Open the **task-instructions-kb** knowledge base
 
+### Review Knowledge Base Configuration
+
+In the left panel, review the following settings:
+
+| Setting | Expected Value | Purpose |
+|---------|---------------|---------|
+| Knowledge sources | task-instructions-source | Indexed task instruction documents |
+| Chat completion model | (see note below) | Required for reasoning effort above Minimal |
+| Reasoning effort | Minimal (default) | Controls depth of retrieval pipeline |
+| Retrieval mode | Retrieval (recommended) | Uses agentic retrieval with ranking |
+
+> **Note:** If no **Chat completion model** is configured, the reasoning effort must be set to **Minimal**. To use **Low** or **Medium** reasoning effort (which enables query planning, L3 classification, and reflection/iteration), click **+ Add model deployment** and select a deployed chat completion model (e.g., GPT-4o). Without a model, attempting a higher reasoning effort will produce the error: *"A Knowledge Base model must be specified to use any reasoning effort other than 'Minimal'"*.
+
 ### Query the Knowledge Base
 
 In the knowledge base chat panel, enter a query thats specific to your domain / specification.
@@ -99,19 +112,6 @@ What is the REST API user management workflow?
 
 Review the response and note how the knowledge base retrieves relevant task instructions from the **task-instructions-source** knowledge source.
 
-
-### Review Knowledge Base Configuration
-
-In the left panel, review the following settings:
-
-| Setting | Expected Value | Purpose |
-|---------|---------------|---------|
-| Knowledge sources | task-instructions-source | Indexed task instruction documents |
-| Chat completion model | (see note below) | Required for reasoning effort above Minimal |
-| Reasoning effort | Minimal (default) | Controls depth of retrieval pipeline |
-| Retrieval mode | Retrieval (recommended) | Uses agentic retrieval with ranking |
-
-> **Note:** If no **Chat completion model** is configured, the reasoning effort must be set to **Minimal**. To use **Low** or **Medium** reasoning effort (which enables query planning, L3 classification, and reflection/iteration), click **+ Add model deployment** and select a deployed chat completion model (e.g., GPT-4o). Without a model, attempting a higher reasoning effort will produce the error: *"A Knowledge Base model must be specified to use any reasoning effort other than 'Minimal'"*.
 
 ### Restore Security – Disable Public Access
 
