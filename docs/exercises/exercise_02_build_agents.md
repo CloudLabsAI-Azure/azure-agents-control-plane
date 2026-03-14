@@ -172,7 +172,7 @@ Copilot Prompt:
 Update my agents K8s deployment YAML (k8s/autonomous-agent-deployment.yaml or the configured variant) to add the following environment variables to the container spec: AZURE_SEARCH_ENDPOINT (set to the search service endpoint), AZURE_SEARCH_INDEX_NAME (set to task-instructions), and AZURE_SEARCH_KNOWLEDGE_BASE_NAME (set to task-instructions-kb). The AZURE_SEARCH_KNOWLEDGE_BASE_NAME is critical — it enables the AzureAISearchContextProvider to run in agentic mode using KnowledgeBaseRetrievalClient for multi-hop reasoning instead of basic hybrid search. Apply the updated deployment to AKS and verify the pods pick up the new environment variables.
 ```
 
-After Copilot completes the above steps, your agent will have the following agentic retrieval architecture:
+After Copilot completes the above steps, your agent will have the following agentic retrieval components:
 
 | Component | Purpose |
 |---|---|

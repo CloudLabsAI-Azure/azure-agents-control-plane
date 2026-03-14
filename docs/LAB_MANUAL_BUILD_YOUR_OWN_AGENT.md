@@ -2,7 +2,7 @@
 
 ## Overview
 
-This lab guides you through building an AI agent on the `Azure Agents Control Plane` using GitHub Copilot and the SpecKit specification-driven methodology. You will validate your environment, review the project constitution, write an agent specification, implement an MCP-compliant agent with FastAPI, containerize and deploy it to AKS, then inspect the control plane — API Management (APIM) policies, Cosmos DB short-term memory, AI Search long-term memory, and Azure Monitor observability. You will conclude by establishing baseline evaluations, capturing and labeling agent episodes, fine-tuning with Agent Lightning, and re-evaluating to validate improvement through a closed-loop reinforcement learning pipeline.
+This lab guides you through building an AI agent on the `Azure Agents Control Plane` using GitHub Copilot and the SpecKit specification-driven methodology. You will validate your environment, review the project constitution, write an agent specification, implement an MCP-compliant agent with FastAPI, containerize and deploy it to AKS, then inspect the control plane — API Management (APIM) policies, Cosmos DB short-term memory, AI Search long-term memory, and Azure Monitor observability.
 
 **Duration**: 4 hours  
 **Prerequisites**: Environment setup and deployed the base Azure Agents Control Plane infrastructure. (Completed)

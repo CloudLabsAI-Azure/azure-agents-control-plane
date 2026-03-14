@@ -147,11 +147,11 @@ az search service update -g apim-mcp-aks -n $(az resource list --resource-type M
 
 ## Step 3.4: Check Facts/Ontology
 
-Ontologies provide grounded facts for agent reasoning. In agentic systems, an ontology is a structured representation of domain knowledge—defining entity types, relationships, and facts—that the agent uses to anchor its reasoning in verified, real-world data rather than relying solely on the LLM's parametric knowledge. This grounding is critical because it prevents hallucination, ensures consistency across agent sessions, and enables the agent to reason over domain-specific concepts (e.g., "Customer has churn risk 0.85") that the base model was never trained on.
+Ontologies provide grounded facts for agent reasoning. In agentic systems, an ontology is a structured representation of domain knowledge—defining entity types, relationships, and facts—that the agent uses to anchor its reasoning in verified, real-world data rather than relying solely on the LLM's knowledge. This grounding is critical because it prevents hallucination, ensures consistency across agent sessions, and enables the agent to reason over domain-specific concepts (e.g., "Customer has churn risk 0.85") that the base model was never trained on.
 
 Facts within ontologies serve as the agent's source of truth. When the agent retrieves context during planning or task execution, ontology facts provide deterministic, structured data points—such as customer segments, churn predictions with confidence scores, pipeline failure categories, or API endpoint schemas—that complement the probabilistic outputs of the LLM. This combination of structured facts and generative reasoning is what enables agents to produce accurate, actionable recommendations grounded in your organization's actual data.
 
-In this accelerator, ontologies are stored as JSON files and uploaded to a storage account (or Microsoft Fabric OneLake), where the agent can retrieve them at runtime. Three domain ontologies are included:
+In this accelerator, ontologies are stored as JSON files and uploaded to a storage account, where the agent can retrieve them at runtime. Three domain ontologies are included:
 
 | Ontology | Domain | Key Facts |
 |----------|--------|-----------|
@@ -266,7 +266,7 @@ Based on your review, identify any issues with your agents:
 | AI Search – CORS Options | ✅ / ❌ | | Portal Search Explorer may fail without CORS |
 | AI Search – Local Auth (API Keys) | ✅ / ❌ | | Should be disabled; RBAC only |
 | AI Search – Field Searchability | ✅ / ❌ | | Wildcard queries fail if fields not searchable |
-| Facts (Fabric IQ Ontologies) | ✅ / ❌ | | |
+| Facts (Ontologies) | ✅ / ❌ | | |
 | Log Analytics | ✅ / ❌ | | |
 | Entra ID + RBAC | ✅ / ❌ | | |
 
@@ -294,7 +294,7 @@ Before proceeding to Exercise 4, please confirm the following:
 - [ ] Checked AI Search CORS options are configured for portal access
 - [ ] Verified AI Search local auth is disabled (RBAC-only)
 - [ ] Confirmed index fields have correct searchable/retrievable attributes
-- [ ] Reviewed ontology files in storage account / Fabric IQ
+- [ ] Reviewed ontology files in storage account
 - [ ] Queried Log Analytics for agent logs
 - [ ] Verified Entra ID + RBAC role assignments
 - [ ] Take note of problems found
