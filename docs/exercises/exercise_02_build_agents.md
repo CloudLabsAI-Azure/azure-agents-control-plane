@@ -39,8 +39,6 @@ In this exercise, you will use GitHub Copilot and the SpecKit to specify, create
 >
 > To preview `.md` files in the VS Code editor pane, use the hotkey **Ctrl+Shift+V**. This opens a rendered preview so you can read specifications, exercise documents, and other Markdown files without the raw syntax.
 
-
-
 ---
 
 ## Part A: Review the Project Constitution
@@ -73,7 +71,7 @@ In VS Code Explorer, navigate to and open the following files:
 - `.speckit/specifications/healthcare_digital_quality_agent.spec.md`
 - `.speckit/specifications/customer_churn_agent.spec.md`
 - `.speckit/specifications/devops_cicd_pipeline_agent.spec.md`
-- `.speckit/specifications/user_security_agent.spec.mdd`
+- `.speckit/specifications/user_security_agent.spec.md`
 
 The first document: - `.speckit/specifications/healthcare_digital_quality_agent.spec.md` is what was used to build the existing next best action agent. 
 Review the specifications. What do you make of the specifications? What aspects of specification will you re-use for your use-case?
@@ -81,24 +79,32 @@ Review the specifications. What do you make of the specifications? What aspects 
 
 ## Part B: Build Autonomous Agent
 
-### Step B.1: Create Agent Specification with GitHub Copilot.
+You have two (2) options to build your autonomous agent:
+1) use existing specification as-is
+2) make changes to existing specification then use it.
 
-Brainstorm what you want your agent to be / do. 
-For the purposes of this exercise, there is no user interface for the agent. 
-The agent is a python script that can accept an english based description of a task. 
-It can then determine the intent of the task, reason and plan out steps to be done and then execute on them. Keep in mind, this agent of yours needs to be given boundaries an identity and RBAC permissions to resources / tools for it to perform its job. 
+### Step B.1: Use Existing Specification as-is
 
-You'll need to document a new specification or select an existing use case:
+1) To re-use an existing specification, then follow these instructions.
+Choose one of the following and proceed to step B.2:
 
 - `.speckit/specifications/customer_churn_agent.spec.md`
 - `.speckit/specifications/devops_cicd_pipeline_agent.spec.md`
-- `.speckit/specifications/user_security_agent.spec.mdd`
+- `.speckit/specifications/user_security_agent.spec.md`
 
-Now please move onto the next step of using GitHub Copilot and Claude Opus 4.6 to help you review, write, adjust your SpecKit specification and then build it. 
+Note: please dont re-use the healthcare_digital_quality_agent.spec.md because its already built.
 
-In VS Code Explorer, navigate to and open `.speckit/specifications`.
+2) If you want to alter an existing specification then follow these instructions.
+Be sure to edit the following with the actual use case information:
 
-1) To re-use an existing specification . Except dont re-use the healthcare_digital_quality_agent.spec.md because its already built. 
+- `<use_case_file_root>`
+- `<x,y,z>`
+
+Copilot Prompt:
+
+```
+Make a copy of the .speckit/specifications/<use_case_file_root>.spec.md. Make the following changes to it: <x,y,z>.
+```
 
 ### Step B.2: Implement Autonomous Agent, Unit Test(s) and Functional Test(s) with Copilot
 
@@ -111,18 +117,6 @@ Copilot Prompt:
 
 ```
 Implement an MCP-compliant FastAPI agent based on the <autonomous_agent.spec.md> specification. Utilize src/next_best_action_agent.py as a reference implementation. Build the implementation similar to the reference implementation but in its own new file src/autonomous_agent.py. Be sure to include health endpoint, SSE endpoint, and message endpoint with tools/list and tools/call handlers. In addition to the domain-specific tools, include all of the Agent Lightning tools from the reference implementation (lightning_list_episodes, lightning_get_episode, lightning_assign_reward, lightning_list_rewards, lightning_build_dataset, lightning_list_datasets, lightning_start_training, lightning_get_training_status, lightning_list_training_runs, lightning_promote_deployment, lightning_get_active_deployment, lightning_list_deployments, lightning_rollback_deployment, lightning_deactivate_deployment, lightning_get_stats). These Lightning tools enable fine-tuning and reinforcement learning capabilities — include the Lightning imports, tool function definitions, tool catalog entries in tools/list, and tool dispatch handlers in tools/call exactly as they appear in the reference implementation. Also create pytest unit tests in tests/test_autonomous_agent_unit.py covering the health endpoint, MCP initialize, tools/list, and tools/call methods. Create functional tests in tests/test_autonomous_agent_functional.py covering the health endpoint, MCP initialize, tools/list, and tools/call methods. Make a new DockerFile specific to this new agent. Make a new k8s/autonomous-agent-deployment.yaml config file too.
-```
-
-2) If you want to alter an existing specification then follow these instructions.
-Be sure to edit the following with the actual use case information:
-
-- `<use_case_file_root>`
-- `<x,y,z>`
-
-Copilot Prompt:
-
-```
-Make a copy of the .speckit/specifications/<use_case_file_root>.spec.md. Make the following changes to it: <x,y,z>.
 ```
 
 

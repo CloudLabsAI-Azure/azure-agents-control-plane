@@ -111,7 +111,6 @@ And then choose which level of approval e.g. Allow All Commands in this Session
 ![Approvals3](media/3.png)
 
 
-
 **Step 3 — Copilot Executes and Reports Results**
 
 Copilot runs the commands in VS Code's integrated terminal, captures the output, and reports the results directly in the chat panel. If any step fails, Copilot will suggest corrective actions you can either have auto-approved or manually approve and execute.
@@ -147,9 +146,6 @@ You will work hands-on with SpecKit in Exercise 2: Build Agents.
 ## Step 1.3: Validate Environment
 
 Use **GitHub Copilot in Agent Mode** to complete each validation step below. Open Copilot Chat (`Ctrl+Alt+I`), select **Agent** mode from the dropdown, and enter the prompts listed for each step. Copilot will run the commands in VS Code's integrated terminal and help you resolve any issues.
-
-### Auto Approving Agent Actions
-
 
 ### AKS Cluster Access
 

@@ -357,7 +357,7 @@ Fill in the table below with your actual scores. Expected improvement ranges are
 Copilot Prompt:
 
 ```
-Run an automated comparison of episode quality before and after fine-tuning using: python -m src.lightning.cli compare-versions --agent-id autonomous-agent --before-date 2026-03-19T14:00:00Z --after-date 2026-03-19T18:00:00Z. Display the comparison table with intent resolution, tool accuracy, and task adherence metrics.
+Run an automated comparison of episode quality before and after fine-tuning using: python -m src.lightning.cli compare-versions --agent-id autonomous-agent --before-date 2026-03-19T14:00:00Z --after-date 2026-03-19T18:00:00Z. Adjust the dates / times as needed. Display the comparison table with intent resolution, tool accuracy, and task adherence metrics.
 ```
 
 ### Example Comparison Output
@@ -412,6 +412,21 @@ If scores didn't meaningfully change, the issue is usually one of:
 | Learning rate too high | Reduce `--learning-rate-multiplier` to 0.05 |
 | Too few epochs | Increase from 3 to 5 if validation loss is still decreasing |
 
+Copilot prompt:
+
+```
+Diagnose why fine-tuning produced flat evaluation scores for the autonomous-agent. Do the following:
+
+1. Check training data volume and diversity: Run python -m src.lightning.cli dataset-info --name autonomous-agent-v1 and report the episode count, average reward, and token count. If there are fewer than 50 episodes, that is likely the root cause.
+
+2. Check reward distribution: Run python -m src.lightning.cli list-rewards --agent-id autonomous-agent --limit 50 and summarize the reward distribution — what percentage are above 0.85? If most rewards cluster between 0.7–0.75, the training signal is too weak.
+
+3. Check intent diversity: Read the training dataset JSONL file and count how many unique intents are represented. If more than 60% of episodes cover a single intent, the model isn't learning breadth.
+
+4. Check training metrics: Run python -m src.lightning.cli get-training-status --training-run-id <training_run_id> and report training_loss and validation_loss. If validation loss increased in later epochs while training loss decreased, the model is overfitting.
+
+5. Based on the findings, recommend the specific fix: more episodes, higher reward threshold, more diverse queries, lower learning rate, or more epochs. Then re-run the fine-tuning pipeline with the adjusted parameters.
+```
 ---
 
 ## Step 4.12: Store Evaluation Results with Copilot
