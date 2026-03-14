@@ -1,3 +1,6 @@
+> [!CAUTION]
+> These exercises have not been fully tested. There could be incorrect or missing instructions. There could be missing infrastructure. Use at your own risk.
+
 # Exercise: Evaluate Agent
 
 **Duration:** 30 minutes

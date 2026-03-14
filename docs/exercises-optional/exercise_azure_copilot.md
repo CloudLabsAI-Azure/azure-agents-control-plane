@@ -1,5 +1,5 @@
 > [!CAUTION]
-> These exercises have not been tested. There could be incorrect or missing instructions.
+> These exercises have not been fully tested. There could be incorrect or missing instructions. There could be missing infrastructure. Use at your own risk.
 
 # Optional Exercise: Azure Copilot Integration
 

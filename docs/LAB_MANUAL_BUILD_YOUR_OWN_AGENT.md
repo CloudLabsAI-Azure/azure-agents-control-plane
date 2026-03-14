@@ -14,8 +14,8 @@ This lab guides you through building an AI agent on the `Azure Agents Control Pl
 | Exercise | Duration | Description |
 |----------|----------|-------------|
 | 1: Lab Intro | 30 min | Review objectives, architecture, validate environment |
-| 2: Build Agents | 2 hr | Use GitHub Copilot and SpecKit to specify, create, test, and deploy agents |
-| 3: Review Agents Control Plane | 30 min | Inspect security, governance, memory, and observability. |
+| 2: Build Agent(s) | 2 hr | Use GitHub Copilot and SpecKit to specify, create, test, and deploy your agent(s) |
+| 3: Review Agent(s) Control Plane | 30 min | Inspect security, governance, memory, and observability. |
 
 ---
 

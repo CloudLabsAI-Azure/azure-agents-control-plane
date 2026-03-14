@@ -91,6 +91,11 @@ You have three (3) options to build your autonomous agent:
 >
 > If you are short on time, don't build your own autonomous agent skip to exercise 3 to review the agents control plane.
 
+> [TIP]
+> **Multi-Agent Architectures Are Possible**
+>
+> Your specification can define a multi-agent topology with an orchestrator that delegates to sub-agents (e.g., Context Agent, Scoring Agent, Approval Agent). See `.speckit/specifications/healthcare_digital_quality_agent.spec.md` and its "Multi-Agent Decomposition" section for an example. However, in the interest of time, we recommend keeping your agent simple with a single-agent design for this exercise.
+
 ### Step B.1: Use/Modify or Create Existing Specifications
 
 1) To re-use an existing specification, then follow these instructions.
