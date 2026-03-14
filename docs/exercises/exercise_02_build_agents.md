@@ -68,9 +68,10 @@ As you review, take note at a high-level concepts that stand out in the followin
 
 In VS Code Explorer, navigate to and open the following files:
 
-- `.speckit/specifications/healthcare_digital_quality_agent.spec.md`
+- `.speckit/specifications/autonomous_carwash_agent.spec.md`
 - `.speckit/specifications/customer_churn_agent.spec.md`
-- `.speckit/specifications/devops_cicd_pipeline_agent.spec.md`
+- `.speckit/specifications/healthcare_digital_quality_agent.spec.md`
+- `.speckit/specifications/helpdesk_triage_agent.spec.md`
 - `.speckit/specifications/user_security_agent.spec.md`
 
 The first document: - `.speckit/specifications/healthcare_digital_quality_agent.spec.md` is what was used to build the existing next best action agent. 
@@ -89,8 +90,9 @@ You have three (3) options to build your autonomous agent:
 1) To re-use an existing specification, then follow these instructions.
 Choose one of the following and proceed to step B.3:
 
+- `.speckit/specifications/autonomous_carwash_agent.spec.md`
 - `.speckit/specifications/customer_churn_agent.spec.md`
-- `.speckit/specifications/devops_cicd_pipeline_agent.spec.md`
+- `.speckit/specifications/helpdesk_triage_agent.spec.md`
 - `.speckit/specifications/user_security_agent.spec.md`
 
 Note: please dont re-use the healthcare_digital_quality_agent.spec.md because its already built.
@@ -135,7 +137,7 @@ Your agent needs domain-specific facts to ground its reasoning. Copilot will gen
 
 Copilot Prompt:
 ```
-Review the existing ontology fact files in facts/ontology/ (customer_churn_ontology.json, cicd_pipeline_ontology.json, user_management_ontology.json) as examples. Generate a new ontology fact file for my agents domain based on its specification. Save it to facts/ontology/<my_domain>_ontology.json following the same JSON structure. Then upload all ontology files from facts/ontology/ to the Azure Storage accounts ontologies container by creating and running scripts/upload-ontologies-to-storage.ps1.
+Review the existing ontology fact files in facts/ontology/ (customer_churn_ontology.json, helpdesk_triage_ontology.json, user_management_ontology.json) as examples. Generate a new ontology fact file for my agents domain based on its specification. Save it to facts/ontology/<my_domain>_ontology.json following the same JSON structure. Then upload all ontology files from facts/ontology/ to the Azure Storage accounts ontologies container by creating and running scripts/upload-ontologies-to-storage.ps1.
 ```
 
 ### Step B.4: Ingest Domain Knowledge into AI Search with Copilot

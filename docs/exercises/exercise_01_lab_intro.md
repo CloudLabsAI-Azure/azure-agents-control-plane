@@ -128,8 +128,8 @@ The project is organized around two key artifacts:
 - `.speckit/`
   - `constitution.md`           # Core principles and governance framework
   - `specifications/`           # Individual agent specifications
+    - `autonomous_carwash_agent.spec.md`
     - `customer_churn_agent.spec.md`
-    - `devops_cicd_pipeline_agent.spec.md`
     - `your_agent.spec.md`    # Your agent specification (Exercise 2)
 
 The SpecKit workflow follows this sequence:
