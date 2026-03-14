@@ -334,19 +334,19 @@ Deployment complete!
 
 ## Step 4.10: Post-Training Evaluation (After Fine-Tuning) with Copilot
 
-Run the **same evaluation dataset** from Step 4.2 against the fine-tuned model. This is the critical comparison.
+Run the **same evaluation dataset** against the fine-tuned model. This is the critical comparison.
 
 Copilot Prompt:
 
 ```
-First, ensure the autonomous-agent deployment in the mcp-agents namespace is using the fine-tuned model by setting USE_TUNED_MODEL=true: run kubectl set env deployment/autonomous-agent USE_TUNED_MODEL=true -n mcp-agents, then restart the deployment with kubectl rollout restart deployment/autonomous-agent -n mcp-agents and wait for the rollout to complete. Then run the post-training evaluation using the same dataset and thresholds as the baseline in Step 4.2. Set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Activate the .venv and run: python -m evals.evaluate_next_best_action --data evals/autonomous_agent_eval.jsonl --out evals/eval_results --direct --strict. After the evaluation completes, read the generated eval_summary JSON and compare the scores against the baseline results from Step 4.2. Display a before/after comparison table.
+First, ensure the autonomous-agent deployment in the mcp-agents namespace is using the fine-tuned model by setting USE_TUNED_MODEL=true: run kubectl set env deployment/autonomous-agent USE_TUNED_MODEL=true -n mcp-agents, then restart the deployment with kubectl rollout restart deployment/autonomous-agent -n mcp-agents and wait for the rollout to complete. Then run the post-training evaluation using the same dataset and thresholds as the baseline. Set up a kubectl port-forward from the autonomous-agent service in the mcp-agents namespace on port 8080:80. Activate the .venv and run: python -m evals.evaluate_next_best_action --data evals/autonomous_agent_eval.jsonl --out evals/eval_results --direct --strict. After the evaluation completes, read the generated eval_summary JSON and compare the scores against the baseline results. Display a before/after comparison table.
 ```
 
 ### Compare Before/After Results
 
 Fill in the table below with your actual scores. Expected improvement ranges are provided based on typical fine-tuning results:
 
-| Evaluator | Baseline (Step 4.2) | After Fine-Tuning | Expected Delta | Status |
+| Evaluator | Baseline | After Fine-Tuning | Expected Delta | Status |
 |-----------|--------------------|--------------------|----------------|--------|
 | Intent Resolution | ___ / 5 | ___ / 5 | +0.5 to +1.5 | |
 | Tool Call Accuracy | ___ / 5 | ___ / 5 | +0.5 to +1.0 | |

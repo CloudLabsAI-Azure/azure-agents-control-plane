@@ -162,20 +162,6 @@ Verify I can connect to the AKS cluster and that the mcp-agents namespace exists
 
 Copilot will run `kubectl get nodes` and `kubectl get namespace mcp-agents`. If the connection fails, ask Copilot: *"Help me get AKS credentials for my cluster."*
 
-### Environment Variables
-
-Copilot Prompt:
-
-```
-Check that the required environment variables are set: CONTAINER_REGISTRY, AZURE_TENANT_ID, FOUNDRY_PROJECT_ENDPOINT, and COSMOSDB_ENDPOINT.
-```
-
-Copilot will inspect your terminal session and identify any missing variables. If values are missing, ask Copilot: 
-
-```
-Help me set the missing environment variables from my Azure deployment.
-```
-
 ### Port-Forward Tunnel to MCP Agents
 
 Copilot Prompt:
@@ -193,7 +179,7 @@ The lab user (defined in the **Environment** tab of your lab portal) needs read/
 Copilot Prompt:
 
 ```
-Grant my signed-in Azure user the Cosmos DB Built-in Data Contributor role on the Cosmos DB account in the apim-mcp-aks resource group. Use the following command:
+Grant my signed-in Azure user the Cosmos DB Built-in Data Contributor role on the Cosmos DB account in the apim-mcp-aks resource group. The cosmosdb and containers already exist. Use the following command:
 
 az cosmosdb sql role assignment create \
   --account-name cosmos-$(az resource list --resource-type Microsoft.DocumentDB/databaseAccounts --query "[0].name" -o tsv) \
@@ -204,6 +190,21 @@ az cosmosdb sql role assignment create \
 ```
 
 Copilot will resolve your Cosmos DB account name and your Azure AD principal ID, then create the role assignment. Once complete, your portal user will have read/write access to all databases and containers in the account.
+
+### Environment Variables
+
+Copilot Prompt:
+
+```
+Check that the required environment variables are set: CONTAINER_REGISTRY, AZURE_TENANT_ID, FOUNDRY_PROJECT_ENDPOINT, and COSMOSDB_ENDPOINT.
+```
+
+Copilot will inspect your terminal session and identify any missing variables. If values are missing, ask Copilot: 
+
+```
+Help me set the missing environment variables from my Azure deployment.
+```
+
 
 ### Build Docker Image and Push to ACR
 
@@ -222,7 +223,7 @@ Copilot will log in to ACR, build the Docker image, tag it with the registry nam
 Copilot Prompt:
 
 ```
-Activate the .venv virtual environment and run tests/test_next_best_action_functional.py in direct mode. If AKS isnt started, start it.
+Activate the .venv virtual environment and run tests/test_next_best_action_functional.py in direct mode. If AKS isnt started, start it. If a config file is needed create it.
 ```
 
 Copilot will activate the virtual environment, navigate to the tests directory, and execute the connection test.

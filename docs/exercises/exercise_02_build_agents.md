@@ -29,6 +29,16 @@ In this exercise, you will use GitHub Copilot and the SpecKit to specify, create
 >
 > ![Steering Copilot](media/6.png)
 
+> [TIP]
+> **Troubleshooting: Prompts Requiring Excessive Back and Forth**
+>
+> If you find yourself repeatedly rephrasing prompts or Copilot isn't following complex instructions on the first attempt, check that you are using the **Claude Opus 4.6** model. Click the model selector at the bottom of the Copilot Chat panel and ensure **Claude Opus 4.6** is selected. Other models may struggle with multi-step, specification-driven prompts and require significantly more steering.
+
+> [TIP]
+> **Previewing Markdown Files**
+>
+> To preview `.md` files in the VS Code editor pane, use the hotkey **Ctrl+Shift+V**. This opens a rendered preview so you can read specifications, exercise documents, and other Markdown files without the raw syntax.
+
 
 
 ---
@@ -86,33 +96,21 @@ You'll need to document a new specification or select an existing use case:
 
 Now please move onto the next step of using GitHub Copilot and Claude Opus 4.6 to help you review, write, adjust your SpecKit specification and then build it. 
 
-
-
 In VS Code Explorer, navigate to and open `.speckit/specifications`.
 
-To develop your specification, have three options.
-1) start from scratch
-2) modify an existing specification
-3) simply re-use an existing specification
+1) To re-use an existing specification . Except dont re-use the healthcare_digital_quality_agent.spec.md because its already built. 
 
-1) If you want to start from scratch then follow these instructions.
-Be sure to edit the following with the actual use case information:
+### Step B.2: Implement Autonomous Agent, Unit Test(s) and Functional Test(s) with Copilot
 
-- `<responsibility_of_your_agent>`
-- `<do x,y,z>`
+For reference, if you are inclined, review the code in the following files: `src/next_best_action_agent.py`, `src/next_best_action_agent_unit.py`, `src/next_best_action_agent_functional.py`. There are the files that are built from the `healthcare_digital_quality_agent.spec.md` specification. Its more of a catalog of methods than an official reference implementation but the functionality can be re-used as a template for your own agent. Note: clean-up, refactoring of these files are needed. Some of implementation choices were done so to accommodate the lab environment itself. 
 
+Whether you create a new specification from scratch, made changes to an existing specification or just used an existing specification, you should end up in a position with specification that can now be used to create your agent. 
+
+To create the agent,
 Copilot Prompt:
 
 ```
-Create an specification for an autonomous <responsibility_of_your_agent> agent that can <do x,y,z> without human intervention. Follow the SpecKit template format. Utilize the .speckit/specifications as an example.
-
-The specification should include:
-- Overview (Spec ID, Version, Domain, Governance Model: Autonomous)
-- Business Framing
-- MCP Tool Catalog
-- Workflow Specification
-- Success Metrics
-- Security Requirements
+Implement an MCP-compliant FastAPI agent based on the <autonomous_agent.spec.md> specification. Utilize src/next_best_action_agent.py as a reference implementation. Build the implementation similar to the reference implementation but in its own new file src/autonomous_agent.py. Be sure to include health endpoint, SSE endpoint, and message endpoint with tools/list and tools/call handlers. In addition to the domain-specific tools, include all of the Agent Lightning tools from the reference implementation (lightning_list_episodes, lightning_get_episode, lightning_assign_reward, lightning_list_rewards, lightning_build_dataset, lightning_list_datasets, lightning_start_training, lightning_get_training_status, lightning_list_training_runs, lightning_promote_deployment, lightning_get_active_deployment, lightning_list_deployments, lightning_rollback_deployment, lightning_deactivate_deployment, lightning_get_stats). These Lightning tools enable fine-tuning and reinforcement learning capabilities — include the Lightning imports, tool function definitions, tool catalog entries in tools/list, and tool dispatch handlers in tools/call exactly as they appear in the reference implementation. Also create pytest unit tests in tests/test_autonomous_agent_unit.py covering the health endpoint, MCP initialize, tools/list, and tools/call methods. Create functional tests in tests/test_autonomous_agent_functional.py covering the health endpoint, MCP initialize, tools/list, and tools/call methods. Make a new DockerFile specific to this new agent. Make a new k8s/autonomous-agent-deployment.yaml config file too.
 ```
 
 2) If you want to alter an existing specification then follow these instructions.
@@ -127,20 +125,6 @@ Copilot Prompt:
 Make a copy of the .speckit/specifications/<use_case_file_root>.spec.md. Make the following changes to it: <x,y,z>.
 ```
 
-3) If you simply want to re-use an existing specification thats okay too. Except dont re-use the healthcare_digital_quality_agent.spec.md because its already built. 
-
-Whether you create a new specification from scratch, made changes to an existing specification or just used an existing specification, you should end up in a position with specification that can now be used to create your agent. 
-
-### Step B.2: Implement Autonomous Agent, Unit Test(s) and Functional Test(s) with Copilot
-
-For reference, if you are inclined, review the code in the following files: `src/next_best_action_agent.py`, `src/next_best_action_agent_unit.py`, `src/next_best_action_agent_functional.py`. There are the files that are built from the `healthcare_digital_quality_agent.spec.md` specification. Its more of a catalog of methods than an official reference implementation but the functionality can be re-used as a template for your own agent. Note: clean-up, refactoring of these files are needed. Some of implementation choices were done so to accommodate the lab environment itself. 
-
-To create the agent,
-Copilot Prompt:
-
-```
-Implement an MCP-compliant FastAPI agent based on the <autonomous_agent.spec.md> specification. Utilize src/next_best_action_agent.py as a reference implementation. Build the implementation similar to the reference implementation but in its own new file src/autonomous_agent.py. Be sure to include health endpoint, SSE endpoint, and message endpoint with tools/list and tools/call handlers. In addition to the domain-specific tools, include all of the Agent Lightning tools from the reference implementation (lightning_list_episodes, lightning_get_episode, lightning_assign_reward, lightning_list_rewards, lightning_build_dataset, lightning_list_datasets, lightning_start_training, lightning_get_training_status, lightning_list_training_runs, lightning_promote_deployment, lightning_get_active_deployment, lightning_list_deployments, lightning_rollback_deployment, lightning_deactivate_deployment, lightning_get_stats). These Lightning tools enable fine-tuning and reinforcement learning capabilities — include the Lightning imports, tool function definitions, tool catalog entries in tools/list, and tool dispatch handlers in tools/call exactly as they appear in the reference implementation. Also create pytest unit tests in tests/test_autonomous_agent_unit.py covering the health endpoint, MCP initialize, tools/list, and tools/call methods. Create functional tests in tests/test_autonomous_agent_functional.py covering the health endpoint, MCP initialize, tools/list, and tools/call methods. Make a new DockerFile specific to this new agent. Make a new k8s/autonomous-agent-deployment.yaml config file too.
-```
 
 ### Step B.3: Generate Domain Knowledge Facts with Copilot
 
