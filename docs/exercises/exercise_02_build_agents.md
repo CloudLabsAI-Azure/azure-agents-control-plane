@@ -79,14 +79,15 @@ Review the specifications. What do you make of the specifications? What aspects 
 
 ## Part B: Build Autonomous Agent
 
-You have two (2) options to build your autonomous agent:
+You have three (3) options to build your autonomous agent:
 1) use existing specification as-is
-2) make changes to existing specification then use it.
+2) make changes to existing specification then use it
+3) ask copilot to generate a new specification for you
 
-### Step B.1: Use Existing Specification as-is
+### Step B.1: Use/Modify or Create Existing Specifications
 
 1) To re-use an existing specification, then follow these instructions.
-Choose one of the following and proceed to step B.2:
+Choose one of the following and proceed to step B.3:
 
 - `.speckit/specifications/customer_churn_agent.spec.md`
 - `.speckit/specifications/devops_cicd_pipeline_agent.spec.md`
@@ -105,6 +106,14 @@ Copilot Prompt:
 ```
 Make a copy of the .speckit/specifications/<use_case_file_root>.spec.md. Make the following changes to it: <x,y,z>.
 ```
+
+3) If you want to create an new specification then follow these instructions.
+Be sure to edit the following with the actual use case information:
+
+Brainstorm what you want your agent to be / do. 
+For the purposes of this exercise, there is no user interface for the agent. 
+The agent is a python script that can accept an english based description of a task. 
+It can then determine the intent of the task, reason and plan out steps to be done and then execute on them. Keep in mind, this agent of yours needs to be given boundaries an identity and RBAC permissions to resources / tools for it to perform its job. 
 
 ### Step B.2: Implement Autonomous Agent, Unit Test(s) and Functional Test(s) with Copilot
 
