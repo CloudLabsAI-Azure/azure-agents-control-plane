@@ -301,4 +301,17 @@ Before proceeding to Exercise 4, please confirm the following:
 
 ---
 
-To continue the lab, click on the **Next** button.
+## Congratulations!
+
+You've completed the **Azure Agents Control Plane Lab**! Through these exercises, you:
+
+1. ✅ **Reviewed** the lab objectives and solution architecture
+2. ✅ **Built** an autonomous agent using GitHub Copilot with SpecKit
+3. ✅ **Reviewed** security, governance, memory, and observability
+
+Your agents now benefit from:
+- **Enterprise security/governance** through APIM policies
+- **Persistent memory** with Cosmos DB
+- **Intelligent search** via AI Foundry and AI Search/FoundryIQ integration
+- **Full observability** with Azure Monitor integration
+

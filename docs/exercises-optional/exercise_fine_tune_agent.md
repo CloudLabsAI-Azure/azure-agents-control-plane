@@ -499,22 +499,3 @@ You have completed the fine-tuning and evaluation exercise:
 6. **Training data quality gates matter** — reward thresholds and episode diversity directly determine fine-tuning outcomes
 
 ---
-
-## Congratulations!
-
-You've completed the **Build Your Own Agent** lab! Through 4 exercises, you:
-
-1. ✅ **Reviewed** the lab objectives and solution architecture
-2. ✅ **Built** an autonomous agent using GitHub Copilot with SpecKit
-3. ✅ **Reviewed** security, governance, memory, and observability
-4. ✅ **Fine-tuned and evaluated** your agent using Agent Lightning with reinforcement learning and the Azure AI Evaluation SDK
-
-Your agents now benefit from:
-- **Enterprise security/governance** through APIM policies
-- **Persistent memory** with Cosmos DB
-- **Intelligent search** via AI Foundry and AI Search/FoundryIQ integration
-- **Continuous improvement** via Agent Lightning fine-tuning
-- **Quality assurance** through eval-gated fine-tuning with before/after measurement
-- **Full observability** with Azure Monitor integration
-
----
