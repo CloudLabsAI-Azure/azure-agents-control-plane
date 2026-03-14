@@ -16,7 +16,6 @@ This lab guides you through building an AI agent on the `Azure Agents Control Pl
 | 1: Lab Intro | 30 min | Review objectives, architecture, validate environment |
 | 2: Build Agents | 2 hr | Use GitHub Copilot and SpecKit to specify, create, test, and deploy agents |
 | 3: Review Agents Control Plane | 30 min | Inspect security, governance, memory, and observability. |
-| 4: Fine-Tune and Evaluate Agent | 1 hr | Evaluate baseline, fine-tune with Agent Lightning, re-evaluate to validate improvement |
 
 ---
 
@@ -69,15 +68,6 @@ By the end of this lab, you will be able to:
 ### Observability
 - Monitor agent behavior using Azure Monitor and Application Insights
 - Browse or Query telemetry with Kusto Query Language (KQL)
-
-### Evaluation & Fine-Tuning
-- Establish baseline evaluation scores before fine-tuning
-- Capture agent episodes for training data collection
-- Label episodes with rewards
-- Fine-tune models using Agent Lightning
-- Re-evaluate after fine-tuning to measure improvement
-- Apply decision gates (keep, rollback, or retrain) based on eval results
-- Run structured evaluations measuring intent resolution, tool accuracy, and task adherence
 
 ---
 

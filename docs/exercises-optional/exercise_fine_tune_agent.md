@@ -278,6 +278,8 @@ Fine-tuned model: gpt-4o-mini-2024-07-18.ft-50b46088abde49e5869181f7a47b782b
 
 > **Important**: The `lightning_get_training_status` MCP tool polls the Azure OpenAI API on each call, syncing the real-time status back to Cosmos DB. This ensures the Cosmos record stays current with the actual AOAI job status.
 
+
+
 ### Interpreting Training Metrics
 
 | Metric | What It Means | Watch For |

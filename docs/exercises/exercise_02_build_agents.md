@@ -70,6 +70,7 @@ In VS Code Explorer, navigate to and open the following files:
 
 - `.speckit/specifications/autonomous_carwash_agent.spec.md`
 - `.speckit/specifications/customer_churn_agent.spec.md`
+- `.speckit/specifications/devops_cicd_pipeline_agent.spec.md`
 - `.speckit/specifications/healthcare_digital_quality_agent.spec.md`
 - `.speckit/specifications/helpdesk_triage_agent.spec.md`
 - `.speckit/specifications/user_security_agent.spec.md`
@@ -85,13 +86,19 @@ You have three (3) options to build your autonomous agent:
 2) make changes to existing specification then use it
 3) ask copilot to generate a new specification for you
 
+> [TIP]
+> **Short on Time?**
+>
+> If you are short on time, don't build your own autonomous agent skip to exercise 3 to review the agents control plane.
+
 ### Step B.1: Use/Modify or Create Existing Specifications
 
 1) To re-use an existing specification, then follow these instructions.
-Choose one of the following and proceed to step B.3:
+Choose one of the following and proceed to step B.2:
 
 - `.speckit/specifications/autonomous_carwash_agent.spec.md`
 - `.speckit/specifications/customer_churn_agent.spec.md`
+- `.speckit/specifications/devops_cicd_pipeline_agent.spec.md`
 - `.speckit/specifications/helpdesk_triage_agent.spec.md`
 - `.speckit/specifications/user_security_agent.spec.md`
 
